@@ -6,13 +6,14 @@ from logs import log
 import this.server as this_server
 
 
-def get_peer_list(ip, subnet):
+def get_peer_list():
     """
     return list of all ip addresses of that ip address
     then checking that the same application is running on the other side
     -- i think it's not a good idea but for now let it be
     """
     pass
+
 
 def initialize():
     re.server_given_list.extend(get_peer_list())

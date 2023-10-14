@@ -24,7 +24,6 @@ server_port = 7070
 
 
 def connectPeers() -> list[obj.handleSocket]:
-
     lis = []  # list of peer sockets
     if re.server_given_list:
         for addr in re.server_given_list:
@@ -48,7 +47,6 @@ def managePeers():
 
 
 def makeServer() -> tuple[soc.socket, td.Thread]:
-
     this_server_socket = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
     this_server_socket.bind((server_ip, server_port))
 

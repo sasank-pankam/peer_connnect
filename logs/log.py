@@ -25,6 +25,7 @@ def writeLogTextTransferErrors(message: str):
     with open('log_files/text_transfer.log', 'a') as log_file:
         log_file.write(f'[ {time} ]  -> {message} ')
 
+
 def writeLogPeerConnectionErrors(message: str):
     time = __getTimeStamp()
     with open('log_files/peer_connection.log', 'a') as log_file:
