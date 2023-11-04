@@ -29,6 +29,7 @@ class handleSocket:
 
     @staticmethod
     def __getHeader(text: str | bytes, *extras):
+
         header = (' '.join(extras) + ' ' + str(len(text))).encode('utf-8')
         header += b' ' * (64 - len(header))
         return header
