@@ -6,11 +6,13 @@ import web_page.manage as wb
 
 
 class handleSocket:
+    sender_name = None
+
     def process(self, header: list, content) -> bool:
 
         try:
             if header[0] == 'TEXT':
-                self.web_page.send_text(self.ip, content)
+                self.web_page.send(self.ip, content)
             elif header[0] == 'FILE':
                 with open(header[1], 'ab') as fp:
                     fp.write(content)
@@ -18,14 +20,20 @@ class handleSocket:
             return False
         return True
 
-    def __init__(self, handle: soc.socket, ip: str, web_page: wb.manage_web_socket):
+    def __init__(self, handle: soc.socket, ip: str, web_page: wb.WebSocketHandler, name: str):
+        self.sender_name = name
         self.client = handle
         self.web_page = web_page
-        self.name = self.client.recv(64)
 
-        self.sender_thread = td.Thread()
+        # -------------------------------------------------------------------
+        if not (h := self.client.recv(64)):
+            self.name = self.client.recv(64).decode(constants.FORMAT).split()[-1]
+        else:
+            self.name = h.decode(constants.FORMAT).split()[-1]
 
-        self.messages = []  # to store incoming messages
+        # -------------------------------------------------------------------
+
+        self.ip = ip
 
     @staticmethod
     def __getHeader(text: str | bytes, *extras):
@@ -55,7 +63,7 @@ class handleSocket:
 
             actContent = self.client.recv(int(header[-1]))
 
-            # processing and exitting the loop
+            # processing and exiting the loop
             if not self.process(header, actContent):
                 break
         self.client.close()

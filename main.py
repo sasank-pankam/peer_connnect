@@ -13,11 +13,13 @@ def get_peer_list():
     then checking that the same application is running on the other side
     -- i think it's not a good idea but for now let it be
     """
+    return []
     pass
 
 
 def send_message(ip, text):
-    re.connected_sockets[ip].sendText(text)
+    with re.locks['connected_sockets']:
+        re.connected_sockets[ip.strip()].sendText(text)
 
 
 async def process_message(message):
@@ -37,14 +39,23 @@ async def run(web_socket):
         await process_message(message)
 
 
+def get_credentials():
+    with open('credetials.txt', 'r') as fp:
+        name = fp.readline()
+        return name
+
+
 def initialize():
-    re.server_given_list.extend(get_peer_list())
+    name = get_credentials()
+
+    with re.locks['threads_of_connected_peers']:
+        re.threads_of_connected_peers.update(get_peer_list())
 
     web_socket = wm.WebSocketHandler()
     run(web_socket)
 
-    this_server.managePeers(web_socket)
-    this_server.makeServer(web_socket)
+    this_server.managePeers(web_socket, name)
+    this_server.makeServer(web_socket, name)
 
 
 if __name__ == '__main__':
