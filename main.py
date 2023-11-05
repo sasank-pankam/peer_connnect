@@ -1,8 +1,8 @@
-import socket as soc
-import constants
+# import socket as soc
+# import constants
 import resources.resources as re
-import threading as td
-from logs import log
+# import threading as td
+# from logs import log
 import web_page.manage as wm
 import this.server as this_server
 
@@ -11,7 +11,7 @@ def get_peer_list():
     """
     return list of all ip addresses of that ip address
     then checking that the same application is running on the other side
-    -- i think it's not a good idea but for now let it be
+    -- I think it's not a good idea but for now let it be
     """
     return []
     pass
@@ -40,7 +40,7 @@ async def run(web_socket):
 
 
 def get_credentials():
-    with open('credetials.txt', 'r') as fp:
+    with open('credentials.txt', 'r') as fp:
         name = fp.readline()
         return name
 
@@ -60,4 +60,3 @@ def initialize():
 
 if __name__ == '__main__':
     initialize()
-

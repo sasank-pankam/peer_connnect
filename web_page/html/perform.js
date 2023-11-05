@@ -31,12 +31,13 @@ function initiate(code)
             console.error('::Received unknown code handshake error :', event.data);
             return false;
         }
-        else 
+        else
             console.log('::Received message :', event.data);                                       //*debug
     });
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected to python");                                                        //*debug
         connectToCode_.send("thisisausername_/!_"+senderdetail);
+        console.log("Username sent")
     });
 }
 
@@ -198,6 +199,6 @@ function recievedmessage(recievedata)
 // ------------------------------------------------------------------------------------------------
 
 document.addEventListener("DOMContentLoaded", function(event) {
-eventlisteners();
-recievedataFromPython();
+    eventlisteners();
+    recievedataFromPython();
 });
