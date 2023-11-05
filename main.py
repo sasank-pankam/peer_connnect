@@ -20,6 +20,7 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
 
 
 def validate_arguments(arguments: list):
+    pass
     
 
 def get_credentials():
