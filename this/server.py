@@ -1,4 +1,6 @@
 import socket as soc
+import threading
+
 import constants
 from . import object as obj
 import threading as td
@@ -50,10 +52,10 @@ def managePeers(web_socket, name):
         re.threads_of_connected_peers.update(threads)
 
 
-def acceptPeers(server: soc.socket, web_socket, name):
+def acceptPeers(server: soc.socket, web_socket, name, exit_event: threading.Event):
     server.listen()
     print(f'Listening for connections at {server.getsockname()} ')
-    while True:
+    while not exit_event.wait(timeout=0.01):
         new_client, new_client_address = server.accept()
 
         with re.locks['connected_sockets']:
@@ -66,7 +68,7 @@ def acceptPeers(server: soc.socket, web_socket, name):
         peer.start()
 
 
-def makeServer(web_socket, name) -> tuple[soc.socket, td.Thread]:
+def makeServer(web_socket, name, exit_event) -> tuple[soc.socket, td.Thread]:
     server_ip = get_local_ip_address()
     server_port = 7070
 

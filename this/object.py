@@ -1,6 +1,8 @@
 import os.path
 import socket as soc
 import threading
+import time
+
 import constants
 import web_page.manage as wb
 
@@ -26,6 +28,7 @@ class handleSocket:
         self.web_page = web_page
         self.ip = ip
         self.client_lock = threading.Lock()
+        self.bool_var = True
 
         if not (h := self.client.recv(64)):
             self.name = self.client.recv(64).decode(constants.FORMAT).split()[-1]
@@ -58,7 +61,7 @@ class handleSocket:
                     self.client.send(content)
 
     def receiveSomething(self):
-        while True:
+        while self.bool_var:
             header = self.client.recv(64)
             if not header:
                 continue
@@ -69,4 +72,6 @@ class handleSocket:
             # processing and exiting the loop
             if not self.process(header, actContent):
                 break
+            time.sleep(0.01)
+        self.client.send(constants.closing_message.encode(constants.FORMAT))
         self.client.close()
