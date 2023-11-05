@@ -1,0 +1,419 @@
+.division
+{
+    border: 5px solid rgb(61, 91, 129);
+    border-radius: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+    overflow: hidden;   
+}
+.main
+{
+    height: 96vh;
+    width: 97vw;
+    padding: 5px 10px 5px 10px;
+    flex-wrap: wrap;
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+} 
+.alive
+{
+    height: 92%;
+    margin: 10px 10px 0px 5px;
+    padding: 1%;
+    flex-grow: 1;
+    border-radius: 37px 0 0 37px;
+    overflow-y: scroll;
+    scrollbar-width: 1px;
+    scroll-margin: 20px;
+    scroll-behavior: smooth;
+    scroll-padding-top: 30px;
+    z-index: 1;
+}
+::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: rgb(57, 190, 205); 
+    overflow: hidden;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #1575ba;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.alive::-webkit-scrollbar-track {
+    background-color: white; 
+    overflow: hidden;
+}
+
+.alive > div
+{
+    height: 50px;
+    background-color: rgba(152, 192, 217);
+    margin-bottom:7%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.prattle
+{
+	/* border:none; */
+    flex-grow: 1;
+    margin: 10px 10px 5px;
+    height: 92%; 
+    width: 65%;
+    border-radius: 0 37px 37px 0;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: stretch;
+    flex-wrap: nowrap;
+    padding: 1%;
+}
+.viewer
+{
+    flex:87%;
+    border-radius: 0px 24px 0px 0px;
+    margin-bottom: 10px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction:column;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+.viewer>div
+{
+    /* border:2px solid black; */
+    margin-bottom: 18px;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+.viewer::-webkit-scrollbar
+{
+    width: 0px;
+}
+.sender_area
+{
+    border: none;
+    flex:13%;
+    border-radius: 0px 0px 24px 0px ;
+    padding-right: 4%;
+    padding-left: 1%;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+	  align-items: center;
+}
+#message
+{
+    width: 90%;
+    height: 70%;
+    border: 2px solid rgb(3, 19, 13);
+    padding-left: 1em;
+    border-radius: 1em;
+	  margin-right: 1%;
+    outline: oklch(lightness chroma hue);
+    font-size: 1.2em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    resize: none;
+}
+#message::placeholder{
+    position: relative;
+    left :2%;
+    color: rgb(147, 145, 176);
+    font-size: .9em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+.sentmessage
+{
+    display: flex;
+    align-items: start;
+    justify-content: flex-end;
+}
+.recievedmessage
+{
+    display: flex;
+    justify-content: flex-start;
+}
+.form-container {
+    max-width: 400px;
+    margin:0 auto;
+    background-color: #fff;
+    padding: 32px 24px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #212121;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
+  }
+  
+  .form-container button:active {
+    scale: 0.95;
+  }
+  
+  .form-container .logo-container {
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+  .form-container .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-container .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  
+  .form-container .form-group input:focus {
+    outline: none;
+    border-color: #29313b;
+  }
+  
+  .form-container .form-submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: inherit;
+    color: #fff;
+    background-color: #212121;
+    border: none;
+    width: 100%;
+    padding: 12px 16px;
+    font-size: inherit;
+    gap: 8px;
+    margin: 12px 0;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
+  }
+  
+  .form-container .form-submit-btn:hover {
+    background-color: #313131;
+
+  }
+  
+  .form-container .link {
+    color:#c6c5c5;
+    text-decoration: none;
+  }
+  
+  .form-container .signup-link {
+    align-self: center;
+    font-weight: 500;
+  }
+  .signup-link:hover {
+	color: #313131;
+  }
+  .form-container .signup-link .link {
+    font-weight: 400;
+  }
+  .form-control {
+	position: relative;
+	margin-top: 20px;
+	width: auto;
+  }
+  
+  .form-control input {
+	background-color: transparent;
+	border: 0;
+	border-bottom: 2px #201d1d solid;
+	display: block;
+	width: 100%;
+	padding: 15px 0;
+	font-size: 16px;
+	color: #201d1d;
+  }
+  
+  .form-control input:focus,
+  .form-control input:valid {
+	outline: 0;
+	border-bottom-color: rgb(7, 82, 107);
+  }
+  
+  .form-control label {
+	position: absolute;
+	top: 12px;
+	left: 0;
+	pointer-events: none;
+  }
+  
+  .form-control label span {
+	display: inline-block;
+	font-size: 18px;
+	min-width: 5px;
+	color: rgb(17, 14, 14)f2f;
+	transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .form-control input:focus+label span,
+  .form-control input:valid+label span {
+	color: rgb(29, 34, 36);
+	transform: translateY(-30px);
+  }
+  /* From uiverse.io by @satyamchaudharydev */
+/* this button is inspired by -- whatsapp input */
+/* == type to see fully interactive and click the close buttom to remove the text  == */
+
+.form {
+	--input-bg: #FFf;
+   /*  background of input */
+	--padding: 1.5em;
+	--rotate: 80deg;
+   /*  rotation degree of input*/
+	--gap: 2em;
+	/*  gap of items in input */
+	--icon-change-color: #15A986;
+   /*  when rotating changed icon color */
+	--height: 40px;
+   /*  height */
+	width: 200px;
+	padding-inline-end: 1em;
+   /*  change this for padding in the end of input */
+	background: var(--input-bg);
+	position: relative;
+	border-radius: 4px;
+  }
+  
+  .form label {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: var(--height);
+  }
+  
+  .form input {
+	width: 100%;
+	padding-inline-start: calc(var(--padding) + var(--gap));
+	outline: none;
+	background: none;
+	border: 0;
+  }
+  /* style for both icons -- search,close */
+  .form svg {
+	/* display: block; */
+	color: #111;
+	transition: 0.3s cubic-bezier(.4,0,.2,1);
+	position: absolute;
+	height: 15px;
+  }
+  /* search icon */
+  .icon {
+	position: absolute;
+	left: var(--padding);
+	transition: 0.3s cubic-bezier(.4,0,.2,1);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  /* arrow-icon*/
+  .swap-off {
+	transform: rotate(-80deg);
+	opacity: 0;
+	visibility: hidden;
+  }
+  /* close button */
+  .close-btn {
+	/* removing default bg of button */
+	background: none;
+	border: none;
+	right: calc(var(--padding) - var(--gap));
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #111;
+	padding: 0.1em;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	transition: 0.3s;
+	opacity: 0;
+	transform: scale(0);
+	visibility: hidden;
+  }
+  
+  .form input:focus ~ .icon {
+	transform: rotate(var(--rotate)) scale(1.3);
+  }
+  
+  .form input:focus ~ .icon .swap-off {
+	opacity: 1;
+	transform: rotate(-80deg);
+	visibility: visible;
+	color: var(--icon-change-color);
+  }
+  
+  .form input:focus ~ .icon .swap-on {
+	opacity: 0;
+	visibility: visible;
+  }
+  
+  .form input:valid ~ .icon {
+	transform: scale(1.3) rotate(var(--rotate))
+  }
+  
+  .form input:valid ~ .icon .swap-off {
+	opacity: 1;
+	visibility: visible;
+	color: var(--icon-change-color);
+  }
+  
+  .form input:valid ~ .icon .swap-on {
+	opacity: 0;
+	visibility: visible;
+  }
+  
+  .form input:valid ~ .close-btn {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1);
+	transition: 0s;
+  }
+  .submitBtn {
+	width: 13%;
+	height: 70%;
+	border-radius: 30px;
+	border: none;
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.13);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	font-weight: 600;
+	cursor: pointer;
+	color: white;
+	background: linear-gradient(to left,rgb(230, 35, 0),rgb(255, 174, 0));
+	letter-spacing: 0.7px;
+  }
+  
+  .submitBtn:hover .arrow {
+	animation: slide-in-left 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+  
+  @keyframes slide-in-left {
+	0% {
+	  transform: translateX(-10px);
+	  opacity: 0;
+	}
+  
+	100% {
+	  transform: translateX(0px);
+	  opacity: 1;
+	}
+  }
+  
+  .submitBtn:active {
+	transform: scale(0.97);
+  }
