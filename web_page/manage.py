@@ -11,7 +11,7 @@ def send_message(ip, text):
         re.connected_sockets[ip.strip()].sendText(text)
 
 
-async def process_message(message):
+def process_message(message):
     message = message.split()
     if message[0] == 'TEXT':
         ip = message[1]
@@ -21,13 +21,14 @@ async def process_message(message):
 
 
 class WebSocketHandler:
-    def __init__(self, url='web_page/html/index.html'):
+    def __init__(self):
         self.websocket = None
         self.server = websockets.serve(self.handle_connection, 'localhost', 12345)
         server_thread = threading.Thread(target=asyncio.get_event_loop().run_until_complete, args=(self.server,))
         server_thread.start()
-        wb.open(url)
         time.sleep(3)
+        url = 'web_page/html/index.html'
+        wb.open(url)
 
     def handle_connection(self, websocket, path):
         self.websocket = websocket

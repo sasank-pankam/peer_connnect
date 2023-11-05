@@ -1,7 +1,6 @@
 import socket as soc
 import constants
 from . import object as obj
-import resources.resources
 import threading as td
 import resources.resources as re
 import logs.log as log
@@ -28,9 +27,11 @@ def connectPeers(web_socket, name) -> dict[obj.handleSocket]:
                 peer = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
                 try:
                     peer.connect(addr)
-                    lis[addr] = obj.handleSocket(peer, addr, web_socket, name)
-                except OSError as oe:
-                    log.writeLogPeerConnectionErrors(str(oe))
+                    lis[addr[0]] = obj.handleSocket(peer, addr, web_socket, name)
+                    print(f'Connected to {addr}')
+                except Exception as e:
+                    print(f'Cannot able to connect to {addr} due to {e.__cause__} ')
+                    continue
     return lis
 
 
@@ -49,6 +50,22 @@ def managePeers(web_socket, name):
         re.threads_of_connected_peers.update(threads)
 
 
+def acceptPeers(server: soc.socket, web_socket, name):
+    server.listen()
+    print(f'Listening for connections at {server.getsockname()} ')
+    while True:
+        new_client, new_client_address = server.accept()
+
+        with re.locks['connected_sockets']:
+            re.connected_sockets[new_client_address] = (
+                peer := obj.handleSocket(new_client, new_client_address, web_socket, name))
+
+        with re.locks['threads_of_connected_peers']:
+            re.threads_of_connected_peers.add(peer := td.Thread(target=peer.receiveSomething))
+
+        peer.start()
+
+
 def makeServer(web_socket, name) -> tuple[soc.socket, td.Thread]:
     server_ip = get_local_ip_address()
     server_port = 7070
@@ -60,19 +77,3 @@ def makeServer(web_socket, name) -> tuple[soc.socket, td.Thread]:
     t1 = td.Thread(target=acceptPeers, args=[this_server_socket, web_socket, name])
     t1.start()
     return this_server_socket, t1
-
-
-def acceptPeers(server: soc.socket, web_socket, name):
-    server.listen()
-    print(f'Listening for connections at {server.getsockname()} ')
-    while True:
-        new_client, new_client_address = server.accept()
-
-        with re.locks['connected_sockets']:
-            resources.resources.connected_sockets[new_client_address] = (
-                peer := obj.handleSocket(new_client, new_client_address, web_socket, name))
-
-        with re.locks['threads_of_connected_peers']:
-            re.threads_of_connected_peers.add(peer := td.Thread(target=peer.receiveSomething))
-
-        peer.start()

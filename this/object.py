@@ -1,6 +1,6 @@
 import os.path
 import socket as soc
-import threading as td
+import threading
 import constants
 import web_page.manage as wb
 
@@ -14,7 +14,7 @@ class handleSocket:
             if header[0] == 'TEXT':
                 self.web_page.send(self.ip, content)
             elif header[0] == 'FILE':
-                with open(header[1], 'ab') as fp:
+                with open(f'../downloads/{header[1]}', 'ab') as fp:
                     fp.write(content)
         except Exception as e:
             return False
@@ -25,6 +25,7 @@ class handleSocket:
         self.client = handle
         self.web_page = web_page
         self.ip = ip
+        self.client_lock = threading.Lock()
 
         if not (h := self.client.recv(64)):
             self.name = self.client.recv(64).decode(constants.FORMAT).split()[-1]
@@ -44,15 +45,17 @@ class handleSocket:
 
     # t text_length - > header
     def sendText(self, text: str):
-        self.client.send(handleSocket.__getHeader(text, 'TEXT'))
-        self.client.send(text)
+        with self.client_lock:
+            self.client.send(handleSocket.__getHeader(text, 'TEXT'))
+            self.client.send(text)
 
     def sendFile(self, file_path: str):
         name = os.path.basename(file_path)
         with open(file_path, 'rb') as fp:
-            content = fp.readline()
-            self.client.send(handleSocket.__getHeader(content, f'FILE {name}'))
-            self.client.send(content)
+            while content := fp.readline():
+                with self.client_lock:
+                    self.client.send(handleSocket.__getHeader(content, f'FILE {name}'))
+                    self.client.send(content)
 
     def receiveSomething(self):
         while True:
