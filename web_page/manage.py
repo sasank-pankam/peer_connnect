@@ -12,7 +12,7 @@ class WebSocketHandler:
         wb.open(url)
 
     async def connect(self):
-        self.websocket = await websockets.connect(self.url)
+        self.websocket = await websockets.connect(constants.WEBSOCKET_URL)
 
     async def send(self, ip, text):
         string = f'TEXT {ip} {text}'
