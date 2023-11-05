@@ -24,16 +24,16 @@ class handleSocket:
         self.sender_name = name
         self.client = handle
         self.web_page = web_page
+        self.ip = ip
 
-        # -------------------------------------------------------------------
         if not (h := self.client.recv(64)):
             self.name = self.client.recv(64).decode(constants.FORMAT).split()[-1]
         else:
             self.name = h.decode(constants.FORMAT).split()[-1]
 
         # -------------------------------------------------------------------
-
-        self.ip = ip
+        self.web_page.send(self.ip, self.name)
+        # -------------------------------------------------------------------
 
     @staticmethod
     def __getHeader(text: str | bytes, *extras):
