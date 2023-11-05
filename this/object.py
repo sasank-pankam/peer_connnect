@@ -4,6 +4,7 @@ import threading
 import time
 
 import constants
+import resources.resources as re
 import web_page.manage as wb
 
 
@@ -16,7 +17,7 @@ class handleSocket:
             if header[0] == 'TEXT':
                 self.web_page.send(self.ip, content)
             elif header[0] == 'FILE':
-                with open(f'../downloads/{header[1]}', 'ab') as fp:
+                with open(f'{re.directory}/{header[1]}', 'ab') as fp:
                     fp.write(content)
         except Exception as e:
             return False

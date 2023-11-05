@@ -1,11 +1,9 @@
 import socket as soc
 import threading
-
-import constants
+import select
 from . import object as obj
 import threading as td
 import resources.resources as re
-import logs.log as log
 
 
 def get_local_ip_address():
@@ -55,17 +53,23 @@ def managePeers(web_socket, name):
 def acceptPeers(server: soc.socket, web_socket, name, exit_event: threading.Event):
     server.listen()
     print(f'Listening for connections at {server.getsockname()} ')
-    while not exit_event.wait(timeout=0.01):
-        new_client, new_client_address = server.accept()
 
-        with re.locks['connected_sockets']:
-            re.connected_sockets[new_client_address] = (
-                peer := obj.handleSocket(new_client, new_client_address, web_socket, name))
+    while not exit_event.is_set():
+        # Wait for up to 1 second for a connection
+        readable, _, _ = select.select([server], [], [], 0.001)
 
-        with re.locks['threads_of_connected_peers']:
-            re.threads_of_connected_peers.add(peer := td.Thread(target=peer.receiveSomething))
+        if server in readable:
+            new_client, new_client_address = server.accept()
+            with re.locks['connected_sockets']:
+                re.connected_sockets[new_client_address] = (
+                    peer := obj.handleSocket(new_client, new_client_address, web_socket, name))
 
-        peer.start()
+            with re.locks['threads_of_connected_peers']:
+                re.threads_of_connected_peers.add(peer := td.Thread(target=peer.receiveSomething))
+            peer.start()
+
+        else:
+            continue
 
 
 def makeServer(web_socket, name, exit_event) -> tuple[soc.socket, td.Thread]:
@@ -73,9 +77,10 @@ def makeServer(web_socket, name, exit_event) -> tuple[soc.socket, td.Thread]:
     server_port = 7070
 
     print(server_ip, server_port)
+
     this_server_socket = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
     this_server_socket.bind((server_ip, server_port))
-
-    t1 = td.Thread(target=acceptPeers, args=[this_server_socket, web_socket, name])
+    t1 = td.Thread(target=acceptPeers, args=[this_server_socket, web_socket, name, exit_event])
     t1.start()
+
     return this_server_socket, t1

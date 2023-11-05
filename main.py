@@ -9,11 +9,14 @@ import signal
 
 
 def get_peer_list(ip) -> list[tuple[str, str]]:
+
     initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    initial_server_socket.connect((ip, 8095))
+    print(ip, 8095)
+    initial_server_socket.connect((ip, 8094))
+
     if not (k := initial_server_socket.recv(64)):
-        what_is_size = initial_server_socket.recv(64)
-        str_ip = initial_server_socket.recv(int(what_is_size.decode()))
+        size = initial_server_socket.recv(64)
+        str_ip = initial_server_socket.recv(int(size.decode()))
     else:
         print(k)
         str_ip = initial_server_socket.recv(int(k.decode()))
@@ -22,9 +25,16 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
     return lis_ip
 
 
-def validate_arguments(arguments: list):
-    pass
-    
+def validate_arguments(arguments: list[str]):
+    for ind in range(1, len(arguments)):
+        t = arguments[ind].split('=')
+        if t[0] == '--name':
+            with open('credentials.txt', 'r') as fp:
+                lis = fp.readlines()
+                lis[0] = t[1]
+            with open('credentials.txt', 'w') as fp:
+                fp.writelines(lis)
+
 
 def get_credentials():
     with open('credentials.txt', 'r') as fp:
@@ -50,15 +60,16 @@ def initialize():
     current_server, acceptor_thread = this_server.makeServer(web_socket, name, exit_event)
 
 
-def signal_handler():
+def signal_handler(signum, frame):
     global current_server, exit_event, acceptor_thread
     print('Exiting the programme')
     for ip, obj in re.connected_sockets.items():
         obj.bool_var = False
-    if not (current_server and exit_event and acceptor_thread):
+    if not (current_server is None or exit_event is None or acceptor_thread is None):
         exit_event.set()
         acceptor_thread.join()
         current_server.close()
+    exit()
 
 
 if __name__ == '__main__':
