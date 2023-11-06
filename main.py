@@ -9,6 +9,18 @@ import signal
 
 server_socket = None
 
+async def getMessagesFromScript(websocket, path):
+    
+    await websocket.send("2ef7bde608ce5404e97d5f042f95f89f1c232871")
+    async for message in websocket:
+        temp = message.split('_/!_')
+        if temp[0] == "thisisausername":
+            global user_name
+            user_name = temp[1]
+            print("user name: " + user_name)
+        elif temp[0] == "thisisamessage":
+            temp = temp[1].split("~^~")
+            print("from "+user_name+" message: " + temp[0] + " to " + temp[1])
 
 def get_peer_list(ip) -> list[tuple[str, str]]:
 
@@ -17,10 +29,8 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
     initial_server_socket.connect((ip, 12345))
     msg = b'list'
     msg = msg + b' ' * (64 - len(msg))
-    initial_server_socket.send(msg)
-    if not (k := initial_server_socket.recv(64)):
-        size = initial_server_socket.recv(64)
-        str_ip = initial_server_socket.recv(int(size.decode()))
+    initial_server_socket.send(msg) #changed
+   
     else:
         print(k)
         str_ip = initial_server_socket.recv(int(k.decode()))
