@@ -55,7 +55,6 @@ def acceptPeers(server: soc.socket, web_socket, name, exit_event: threading.Even
     print(f'Listening for connections at {server.getsockname()} ')
 
     while not exit_event.is_set():
-        # Wait for up to 1 second for a connection
         readable, _, _ = select.select([server], [], [], 0.001)
 
         if server in readable:

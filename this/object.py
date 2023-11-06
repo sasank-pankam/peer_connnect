@@ -20,7 +20,7 @@ class handleSocket:
                 with open(f'{re.directory}/{header[1]}', 'ab') as fp:
                     fp.write(content)
         except Exception as e:
-            return False
+            print('Unable to process a message due to', e)
         return True
 
     def __init__(self, handle: soc.socket, ip: str, web_page: wb.WebSocketHandler, name: str):
@@ -71,8 +71,7 @@ class handleSocket:
             actContent = self.client.recv(int(header[-1]))
 
             # processing and exiting the loop
-            if not self.process(header, actContent):
-                break
+            self.process(header, actContent)
             time.sleep(0.01)
         self.client.send(constants.closing_message.encode(constants.FORMAT))
         self.client.close()
