@@ -11,8 +11,7 @@ import signal
 def get_peer_list(ip) -> list[tuple[str, str]]:
 
     initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print(ip, 8095)
-    initial_server_socket.connect((ip, 8094))
+    initial_server_socket.connect((ip, 12345))
 
     if not (k := initial_server_socket.recv(64)):
         size = initial_server_socket.recv(64)
