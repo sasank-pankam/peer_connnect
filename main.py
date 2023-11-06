@@ -7,12 +7,17 @@ import web_page.manage as wm
 import this.server as this_server
 import signal
 
+server_socket = None
+
 
 def get_peer_list(ip) -> list[tuple[str, str]]:
 
     initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print(ip)
     initial_server_socket.connect((ip, 12345))
-
+    msg = b'list'
+    msg = msg + b' ' * (64 - len(msg))
+    initial_server_socket.send(msg)
     if not (k := initial_server_socket.recv(64)):
         size = initial_server_socket.recv(64)
         str_ip = initial_server_socket.recv(int(size.decode()))
@@ -20,7 +25,7 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
         print(k)
         str_ip = initial_server_socket.recv(int(k.decode()))
     lis_ip = eval(str_ip)
-    initial_server_socket.close()
+    server_socket = initial_server_socket
     return lis_ip
 
 
@@ -49,7 +54,7 @@ exit_event = threading.Event()
 def initialize():
     global current_server, acceptor_thread, exit_event
     name, ip = get_credentials()
-
+    ip = ip.strip()
     with re.locks['server_given_list']:
         re.server_given_list.extend(get_peer_list(ip))
         print(re.server_given_list)
@@ -68,6 +73,9 @@ def signal_handler(signum, frame):
         exit_event.set()
         acceptor_thread.join()
         current_server.close()
+    msg = b'exit'
+    msg = msg + b' ' * (64 - len(msg))
+    server_socket.send(msg)
     exit()
 
 
