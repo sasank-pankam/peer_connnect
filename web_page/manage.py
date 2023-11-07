@@ -9,11 +9,13 @@ _name = None
 
 
 def send(header, ip, text):
+    print(f'send  ---- {header}_/!_{text}(^){ip}')
     global _websocket
     asyncio.run(_websocket.send(f'{header}_/!_{text}(^){ip}'))
 
 
 async def process_message(_message):
+    print('process_message --- ',_message)
     _message = _message.split('_/!_')
     if _message[0] == 'thisisamessage':
         send_message(*reversed(_message[1].split('~^~')))
@@ -22,11 +24,13 @@ async def process_message(_message):
 
 
 def send_message(ip, text):
+    print('send_message --- ',ip, text)
     with re.locks['connected_sockets']:
         re.connected_sockets[ip.strip()].sendText(text)
 
 
 async def handler(websocket, path):
+
     global _websocket
     _websocket = websocket
     await websocket.send(f'thisismyusername_/!_{_name}')
@@ -38,6 +42,7 @@ async def handler(websocket, path):
 
 
 def send_file(ip, _path):
+    print('send_file --- ',ip, _path)
     with re.locks['connected_sockets']:
         re.connected_sockets[ip.strip()].sendFile(_path)
 

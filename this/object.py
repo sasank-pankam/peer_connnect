@@ -65,7 +65,7 @@ class handleSocket:
     def sendText(self, text: str):
         with self.client_lock:
             self.client.send(handleSocket.__getHeader(text, 'TEXT'))
-            self.client.send(text)
+            self.client.send(text.encode(constants.FORMAT))
 
     def _sendFile(self, file_path: str):
         with open(file_path, 'rb') as fp:
