@@ -166,6 +166,7 @@ function createmessage()
 {
     var subDiv_ = document.createElement("div");
     var Content_ = document.getElementById("message").value;
+    console.log('::Message sent :', Content_);                                       //*debug
     if (Content_ == "")
         return false;
     if (Content_.includes("file::"))
@@ -192,8 +193,8 @@ function createmessage()
     wrapperdiv_.appendChild(subDiv_);
     wrapperdiv_.className = "messagewrapper right";
     focusedUser.appendChild(wrapperdiv_);
-    document.getElementById("message").value="";
     focusedUser.scrollBy(0,100);
+    document.getElementById("message").value="";
     return "thisisamessage_/!_" + Content_ + "~^~" + focusedUser.id
 }
 

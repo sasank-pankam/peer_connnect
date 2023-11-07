@@ -82,25 +82,16 @@ class handleSocket:
         threading.Thread(target=self._sendFile, args=(file_path,)).start()
 
     def receiveSomething(self):
-       try:
-            while self.bool_var:
-                header = self.client.recv(64)
-                if not header:
-                    continue
-                header = header.decode(constants.FORMAT).split()
+        while self.bool_var:
+            header = self.client.recv(64)
+            if not header:
+                continue
+            header = header.decode(constants.FORMAT).split()
 
-                actContent = self.client.recv(int(header[-1]))
+            actContent = self.client.recv(int(header[-1]))
 
-                # processing and exiting the loop
-                process(self, header, actContent)
-                time.sleep(0.01)
-            self.client.send(constants.closing_message.encode(constants.FORMAT))
-            self.client.close()
-
-       except Exception as e:
-           pass
-       finally:
-           with re.locks['connected_sockets']:
-               re.connected_sockets.pop(self.ip)
-           with re.locks['threads_of_connected_peers']:
-               re.threads_of_connected_peers.remove(threading.current_thread())
+            # processing and exiting the loop
+            process(self, header, actContent)
+            time.sleep(0.01)
+        self.client.send(constants.closing_message.encode(constants.FORMAT))
+        self.client.close()
