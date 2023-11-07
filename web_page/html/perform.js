@@ -195,7 +195,7 @@ function createmessage()
     focusedUser.appendChild(wrapperdiv_);
     focusedUser.scrollBy(0,100);
     document.getElementById("message").value="";
-    return "thisisamessage_/!_" + Content_ + "~^~" + focusedUser.id.split("_")[1]);
+    return "thisisamessage_/!_" + Content_ + "~^~" + focusedUser.id.split("_")[1];
 }
 
 function recievedmessage(recievedata)
