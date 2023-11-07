@@ -47,7 +47,7 @@ def connectPeers(name) -> dict[obj.handleSocket]:
 
 
 def managePeers(name):
-    time.sleep(1)
+    time.sleep(4)
     peers = connectPeers(name)
 
     threads = [td.Thread(target=peers[x].receiveSomething) for x in peers]
@@ -75,8 +75,8 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
             send_name(new_client, name)
 
             with re.locks['connected_sockets']:
-                re.connected_sockets[new_client_address] = (
-                    peer := obj.handleSocket(new_client, new_client_address, name))
+                re.connected_sockets[new_client_address[0]] = (
+                    peer := obj.handleSocket(new_client, new_client_address[0], name))
 
             with re.locks['threads_of_connected_peers']:
                 re.threads_of_connected_peers.add(peer := td.Thread(target=peer.receiveSomething))
@@ -87,7 +87,7 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
 
 
 def makeServer(name, exit_event) -> tuple[soc.socket, td.Thread]:
-    time.sleep(1)
+    time.sleep(4)
     server_ip = get_local_ip_address()
     server_port = 7070
 

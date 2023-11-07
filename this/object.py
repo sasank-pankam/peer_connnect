@@ -2,12 +2,12 @@ import socket as soc
 from web_page import manage as wm
 import threading
 import time
-import asyncio
 import constants
 import resources.resources as re
 
 
 def process(obj, header: list, content) -> bool:
+    print(header, content)
     try:
         if header[0] == 'TEXT':
             wm.send('thisisamessage', obj.ip, content.decode(constants.FORMAT))
@@ -37,6 +37,7 @@ class handleSocket:
         self.sender_name = name
         self.client = handle
         self.ip = ip
+
         self.client_lock = threading.Lock()
         self.bool_var = True
 
@@ -44,10 +45,14 @@ class handleSocket:
             self.name = self.client.recv(64).decode(constants.FORMAT).strip()
         else:
             self.name = h.decode(constants.FORMAT).strip()
-
-        # -------------------------------------------------------------------
+        print(self.name)
         wm.send('thisisausername', self.ip, self.name)
+        # try:
+        # # -------------------------------------------------------------------
+        # except:
+        #     pass
         # -------------------------------------------------------------------
+        print('wejl')
 
     @staticmethod
     def __getHeader(text: str | bytes, *extras):
@@ -86,7 +91,7 @@ class handleSocket:
             actContent = self.client.recv(int(header[-1]))
 
             # processing and exiting the loop
-            self.process(header, actContent)
+            process(self, header, actContent)
             time.sleep(0.01)
         self.client.send(constants.closing_message.encode(constants.FORMAT))
         self.client.close()

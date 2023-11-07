@@ -64,6 +64,7 @@ function recievedataFromPython()
     });
     connectToCode_.addEventListener('message', (event) => {
         var recievedata_ = event.data.split("_/!_");
+        console.log('::Received message :', event.data);                                       //*debug
         if  (recievedata_[0] == "thisisamessage")
             recievedmessage(recievedata_[1]);
 
