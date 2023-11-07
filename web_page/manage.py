@@ -43,7 +43,7 @@ async def send_file(ip, _path):
 
 
 def start_server():
-    _start_server = websockets.serve(handler, "localhost", 12345)
+    _start_server = websockets.serve(handler, "localhost", 12346)
     asyncio.get_event_loop().run_until_complete(_start_server)
     asyncio.get_event_loop().run_forever()
 
