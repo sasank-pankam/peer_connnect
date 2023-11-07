@@ -6,7 +6,7 @@ server_given_list = []  # list of ip's given by main server
 
 connected_sockets = {}  # dictionary with ip as key sockets that the current device is connected to
 
-threads_of_connected_peers = set()  # threads that are listening to the sockets
+threads_of_connected_peers = []  # threads that are listening to the sockets
 
 directory = ''
 

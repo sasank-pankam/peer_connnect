@@ -59,7 +59,7 @@ def managePeers(name):
         re.connected_sockets.update(peers)
 
     with re.locks['threads_of_connected_peers']:
-        re.threads_of_connected_peers.update(threads)
+        re.threads_of_connected_peers.extend(threads)
 
 
 def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
@@ -79,7 +79,8 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
                     peer := obj.handleSocket(new_client, new_client_address[0], name))
 
             with re.locks['threads_of_connected_peers']:
-                re.threads_of_connected_peers.add(peer := td.Thread(target=peer.receiveSomething))
+                if peer := td.Thread(target=peer.receiveSomething) not in re.threads_of_connected_peers:
+                    re.threads_of_connected_peers.append(peer)
             peer.start()
 
         else:
