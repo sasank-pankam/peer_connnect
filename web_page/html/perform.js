@@ -5,17 +5,7 @@ function initiate()
     main_division.style.display = "flex";
     form_group.style.display = "none";
     headertile.style.display = "flex";
-    var v =(event) => {
-        console.log('::Received message :', event.data);                                       //*debug
-        var data_ = event.data.split("_/!_");
-        if (data_[0] == "thisismyusername")
-        {
-             senderdetail = data_[1];
-             display_name.textContent = senderdetail;
-        }
-    }
-    connectToCode_.addEventListener('message',v );
-    connectToCode_.removeEventListener('message',v);
+
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected to python");                                                        //*debug
     });
@@ -75,6 +65,8 @@ function recievedataFromPython(connecttocode_)
         else if (recievedata_[0] == "thisismyusername")
         {
             console.log("::Your user name :",recievedata_[1]);
+            senderdetail = recievedata_[1];
+            display_name.textContent = recievedata_[1];
         }
         else
             console.error('::Received unknown message :', event.data);                           //*debug
