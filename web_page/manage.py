@@ -3,7 +3,7 @@ import os
 import webbrowser
 import websockets
 from resources import resources as re
-
+#hello
 _websocket = None
 _name = None
 
