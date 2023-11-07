@@ -79,7 +79,7 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
                     peer := obj.handleSocket(new_client, new_client_address[0], name))
 
             with re.locks['threads_of_connected_peers']:
-                if peer := td.Thread(target=peer.receiveSomething) not in re.threads_of_connected_peers:
+                if (peer := td.Thread(target=peer.receiveSomething)) not in re.threads_of_connected_peers:
                     re.threads_of_connected_peers.append(peer)
             peer.start()
 
