@@ -4,6 +4,7 @@ import select
 from . import object as obj
 import threading as td
 import resources.resources as re
+import time
 
 
 def get_local_ip_address():
@@ -25,7 +26,7 @@ def send_name(client: soc.socket, name: str):
     client.send(send_name)
 
 
-def connectPeers(web_socket, name) -> dict[obj.handleSocket]:
+def connectPeers(name) -> dict[obj.handleSocket]:
     lis = {}  # list of peer sockets
 
     print('Connecting to the peers')
@@ -37,7 +38,7 @@ def connectPeers(web_socket, name) -> dict[obj.handleSocket]:
                     peer.connect((addr, 7070))
                     send_name(peer, name)
 
-                    lis[addr[0]] = obj.handleSocket(peer, addr, web_socket, name)
+                    lis[addr[0]] = obj.handleSocket(peer, addr, name)
                     print(f'Connected to {addr}')
                 except Exception as e:
                     print(f'Cannot able to connect to {addr} due to {e.__cause__} ')
@@ -45,8 +46,9 @@ def connectPeers(web_socket, name) -> dict[obj.handleSocket]:
     return lis
 
 
-def managePeers(web_socket, name):
-    peers = connectPeers(web_socket, name)
+def managePeers(name):
+    time.sleep(1)
+    peers = connectPeers(name)
 
     threads = [td.Thread(target=peers[x].receiveSomething) for x in peers]
 
@@ -60,7 +62,7 @@ def managePeers(web_socket, name):
         re.threads_of_connected_peers.update(threads)
 
 
-def acceptPeers(server: soc.socket, web_socket, name, exit_event: threading.Event):
+def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
     server.listen()
     print(f'Listening for connections at {server.getsockname()} ')
 
@@ -74,7 +76,7 @@ def acceptPeers(server: soc.socket, web_socket, name, exit_event: threading.Even
 
             with re.locks['connected_sockets']:
                 re.connected_sockets[new_client_address] = (
-                    peer := obj.handleSocket(new_client, new_client_address, web_socket, name))
+                    peer := obj.handleSocket(new_client, new_client_address, name))
 
             with re.locks['threads_of_connected_peers']:
                 re.threads_of_connected_peers.add(peer := td.Thread(target=peer.receiveSomething))
@@ -84,7 +86,8 @@ def acceptPeers(server: soc.socket, web_socket, name, exit_event: threading.Even
             continue
 
 
-def makeServer(web_socket, name, exit_event) -> tuple[soc.socket, td.Thread]:
+def makeServer(name, exit_event) -> tuple[soc.socket, td.Thread]:
+    time.sleep(1)
     server_ip = get_local_ip_address()
     server_port = 7070
 
@@ -92,7 +95,7 @@ def makeServer(web_socket, name, exit_event) -> tuple[soc.socket, td.Thread]:
 
     this_server_socket = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
     this_server_socket.bind((server_ip, server_port))
-    t1 = td.Thread(target=acceptPeers, args=[this_server_socket, web_socket, name, exit_event])
+    t1 = td.Thread(target=acceptPeers, args=[this_server_socket, name, exit_event])
     t1.start()
 
     return this_server_socket, t1

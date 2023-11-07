@@ -1,10 +1,10 @@
 import socket as soc
+from web_page import manage as wm
 import threading
 import time
-
+import asyncio
 import constants
 import resources.resources as re
-import web_page.manage as wb
 
 
 class handleSocket:
@@ -14,18 +14,23 @@ class handleSocket:
 
         try:
             if header[0] == 'TEXT':
-                self.web_page.send('thisisamessage', self.ip, content)
+                wm.send('thisisamessage', self.ip, content.decode(constants.FORMAT))
             elif header[0] == 'FILE':
                 with open(f'{re.directory}/{header[1]}', 'ab') as fp:
                     fp.write(content)
+            elif header[0] == 'FILE-COMPLETED':
+                wm.send('compleatedafiletransfer', self.ip, header[1])
+            elif header[0] == 'CLOSE':
+                wm.send('thisisacommand', self.ip, constants.closing_message)
+                self.bool_var = False
+
         except Exception as e:
             print('Unable to process a message due to', e)
         return True
 
-    def __init__(self, handle: soc.socket, ip: str, web_page: wb.WebSocketHandler, name: str):
+    def __init__(self, handle: soc.socket, ip: str, name: str):
         self.sender_name = name
         self.client = handle
-        self.web_page = web_page
         self.ip = ip
         self.client_lock = threading.Lock()
         self.bool_var = True
@@ -36,7 +41,7 @@ class handleSocket:
             self.name = h.decode(constants.FORMAT).strip()
 
         # -------------------------------------------------------------------
-        self.web_page.send('thisisausername', self.ip, self.name)
+        asyncio.get_event_loop().run_until_complete(wm.send('thisisausername', self.ip, self.name))
         # -------------------------------------------------------------------
 
     @staticmethod
@@ -52,14 +57,17 @@ class handleSocket:
             self.client.send(handleSocket.__getHeader(text, 'TEXT'))
             self.client.send(text)
 
-    def sendFile(self, file_path: str):
-
+    def _sendFile(self, file_path: str):
         with open(file_path, 'rb') as fp:
             name = fp.name
             while content := fp.readline():
                 with self.client_lock:
                     self.client.send(handleSocket.__getHeader(content, f'FILE {name}'))
                     self.client.send(content)
+                    time.sleep(0.01)
+
+    def sendFile(self, file_path: str):
+        threading.Thread(target=self._sendFile, args=(file_path,)).start()
 
     def receiveSomething(self):
         while self.bool_var:

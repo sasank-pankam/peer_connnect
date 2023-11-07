@@ -7,12 +7,12 @@ import this.server as this_server
 import signal
 
 
-
 def get_peer_list(ip) -> list[tuple[str, str]]:
-    print('Getting peers in the network')
+
     try:
         initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+        print('Getting peers in the network')
         initial_server_socket.connect((ip, 12345))
         msg = b'list'
         msg = msg + b' ' * (64 - len(msg))
@@ -24,10 +24,12 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
             print(k)
             str_ip = initial_server_socket.recv(int(k.decode()))
         lis_ip = eval(str_ip)
+
+        initial_server_socket.close()
     except Exception as e:
         print('Error in connecting to server for peers in the network')
         return False
-    server_socket = initial_server_socket
+
     return lis_ip
 
 
@@ -53,8 +55,14 @@ acceptor_thread = None
 exit_event = threading.Event()
 server_ip = None
 
+
+def sodi(name, exit_event):
+    global current_server, acceptor_thread
+    current_server, acceptor_thread = this_server.makeServer(name, exit_event)
+
+
 def initialize():
-    global current_server, acceptor_thread, exit_event
+    global current_server, acceptor_thread, exit_event, server_ip
     name, ip = get_credentials()
     ip = ip.strip()
     server_ip = ip
@@ -64,15 +72,18 @@ def initialize():
     with re.locks['server_given_list']:
         re.server_given_list.extend(peer_list)
         print(re.server_given_list)
-    web_socket = wm.WebSocketHandler()
+    td1 = threading.Thread(target=this_server.managePeers, args=[name])
+    td2 = threading.Thread(target=sodi, args=[name, exit_event])
+    td1.start()
+    td2.start()
 
-    this_server.managePeers(web_socket, name)
-    current_server, acceptor_thread = this_server.makeServer(web_socket, name, exit_event)
+    wm.make_server(name)
 
 
 def signal_handler(signum, frame):
     global current_server, exit_event, acceptor_thread
     print('Exiting the programme')
+
     for ip, obj in re.connected_sockets.items():
         obj.bool_var = False
     if not (current_server is None or exit_event is None or acceptor_thread is None):
@@ -87,9 +98,8 @@ def signal_handler(signum, frame):
         msg = b'exit'
         msg = msg + b' ' * (64 - len(msg))
         server.send(msg)
-        exit()
     except Exception:
-        exit()
+        pass
 
 
 if __name__ == '__main__':
