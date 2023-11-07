@@ -16,14 +16,14 @@ def send(header, ip, text):
 async def process_message(_message):
     _message = _message.split('_/!_')
     if _message[0] == 'thisisamessage':
-        await send_message(*reversed(_message[1].split('~^~')))
+        send_message(*reversed(_message[1].split('~^~')))
     elif _message[0] == 'thisisafile':
-        await send_file(*reversed(_message[1].split('~^~')))
+        send_file(*reversed(_message[1].split('~^~')))
 
 
-async def send_message(ip, text):
-    async with re.locks['connected_sockets']:
-        await re.connected_sockets[ip.strip()].sendText(text)
+def send_message(ip, text):
+    with re.locks['connected_sockets']:
+        re.connected_sockets[ip.strip()].sendText(text)
 
 
 async def handler(websocket, path):
@@ -37,9 +37,9 @@ async def handler(websocket, path):
         await process_message(data)
 
 
-async def send_file(ip, _path):
-    async with re.locks['connected_sockets']:
-        await re.connected_sockets[ip.strip()].sendFile(_path)
+def send_file(ip, _path):
+    with re.locks['connected_sockets']:
+        re.connected_sockets[ip.strip()].sendFile(_path)
 
 
 def start_server():
