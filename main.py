@@ -83,14 +83,6 @@ def initialize():
 def signal_handler(signum, frame):
     global current_server, exit_event, acceptor_thread
     print('Exiting the programme')
-
-    for ip, obj in re.connected_sockets.items():
-        obj.bool_var = False
-    if not (current_server is None or exit_event is None or acceptor_thread is None):
-        exit_event.set()
-        acceptor_thread.join()
-        current_server.close()
-
     try:
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.connect((server_ip, 12345))
@@ -100,6 +92,14 @@ def signal_handler(signum, frame):
         server.send(msg)
     except Exception:
         pass
+    print('Exiting from the server...')
+    for ip, obj in re.connected_sockets.items():
+        obj.bool_var = False
+    if not (current_server is None or exit_event is None or acceptor_thread is None):
+        exit_event.set()
+        acceptor_thread.join()
+        current_server.close()
+
 
 
 if __name__ == '__main__':

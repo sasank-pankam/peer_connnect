@@ -1,20 +1,24 @@
 function initiate()
 {
     var connectToCode_;
-     connectToCode_ = new WebSocket('ws://localhost:12345');
-    console.log("connected to 12346");                                                              //*debug
-
+    connectToCode_ = new WebSocket('ws://localhost:12346');
     main_division.style.display = "flex";
     form_group.style.display = "none";
     headertile.style.display = "flex";
     connectToCode_.addEventListener('message', (event) => {
         console.log('::Received message :', event.data);                                       //*debug
-        senderdetail = event.data.split("_/!_")[1];
-        display_name.textContent = senderdetail;
-        });
+        var data_ = event.data.split("_/!_");
+        if (data_[0] == "thisismyusername")
+        {
+             senderdetail = data_[1];
+             display_name.textContent = senderdetail;
+         }
+    });
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected to python");                                                        //*debug
     });
+    eventlisteners();
+    recievedataFromPython();
 }
 
 
@@ -71,10 +75,16 @@ function recievedataFromPython()
         {
             recievedmessage(recievedata_[1])
         }
+        else if (recievedata_[0] == "thisismyusername")
+        {
+            console.log("::Your user name :",recievedata_[1]);
+        }
         else
             console.error('::Received unknown message :', event.data);                           //*debug
     });
     window.addEventListener('beforeunload', function (event) {
+        event.preventDefault();
+        event.returnValue = '';
         connectToCode_.close();
       });
     connectToCode_.addEventListener('close', (event) => {
@@ -213,9 +223,3 @@ function recievedmessage(recievedata)
     recieverid_.appendChild(wrapperdiv_);
     countMessage++;
 }
-
-
-document.addEventListener("DOMContentLoaded", function(event) {
-eventlisteners();
-recievedataFromPython();
-});
