@@ -37,9 +37,8 @@ def connectPeers(name) -> dict[obj.handleSocket]:
                 try:
                     peer.connect((addr, 7070))
                     send_name(peer, name)
-                    print('asewrb.kqkue')
-
-                    lis[addr[0]] = obj.handleSocket(peer, addr, name)
+                    print(addr)
+                    lis[addr] = obj.handleSocket(peer, addr, name)
                     print(f'Connected to {addr}')
                 except Exception as e:
                     print(f'Cannot able to connect to {addr} due to {e.__cause__} ')
