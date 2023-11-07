@@ -5,7 +5,7 @@ function initiate()
     main_division.style.display = "flex";
     form_group.style.display = "none";
     headertile.style.display = "flex";
-    connectToCode_.addEventListener('message', (event) => {
+    var v =(event) => {
         console.log('::Received message :', event.data);                                       //*debug
         var data_ = event.data.split("_/!_");
         if (data_[0] == "thisismyusername")
@@ -13,7 +13,9 @@ function initiate()
              senderdetail = data_[1];
              display_name.textContent = senderdetail;
         }
-    });
+    }
+    connectToCode_.addEventListener('message',v );
+    connectToCode_.removeEventListener('message',v);
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected to python");                                                        //*debug
     });
