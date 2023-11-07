@@ -34,7 +34,7 @@ def connectPeers(web_socket, name) -> dict[obj.handleSocket]:
             for addr in re.server_given_list:
                 peer = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
                 try:
-                    peer.connect(addr)
+                    peer.connect((addr, 7070))
                     send_name(peer, name)
 
                     lis[addr[0]] = obj.handleSocket(peer, addr, web_socket, name)

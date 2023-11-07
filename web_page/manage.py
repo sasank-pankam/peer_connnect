@@ -27,7 +27,8 @@ def process_message(message):
 class WebSocketHandler:
     def __init__(self):
         self.websocket = None
-        self.server = websockets.serve(self.handle_connection, 'localhost', 12345)
+        self.server = websockets.serve(self.handle_connection, 'localhost', 12346)
+        print()
         server_thread = threading.Thread(target=asyncio.get_event_loop().run_until_complete, args=(self.server,))
         server_thread.start()
         time.sleep(3)
