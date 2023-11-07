@@ -57,5 +57,5 @@ def create_server():
 def make_server(name):
     global _name
     _name = name
-    webbrowser.open(os.getcwd() + 'web_page/html/index.html')
+    webbrowser.open(os.getcwd() + '/web_page/html/index.html')
     create_server()
