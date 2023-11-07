@@ -1,4 +1,3 @@
-import os.path
 import socket as soc
 import threading
 import time
@@ -15,7 +14,7 @@ class handleSocket:
 
         try:
             if header[0] == 'TEXT':
-                self.web_page.send(self.ip, content)
+                self.web_page.send('thisisamessage', self.ip, content)
             elif header[0] == 'FILE':
                 with open(f'{re.directory}/{header[1]}', 'ab') as fp:
                     fp.write(content)
@@ -32,12 +31,12 @@ class handleSocket:
         self.bool_var = True
 
         if not (h := self.client.recv(64)):
-            self.name = self.client.recv(64).decode(constants.FORMAT).split()[-1]
+            self.name = self.client.recv(64).decode(constants.FORMAT).strip()
         else:
-            self.name = h.decode(constants.FORMAT).split()[-1]
+            self.name = h.decode(constants.FORMAT).strip()
 
         # -------------------------------------------------------------------
-        self.web_page.send(self.ip, self.name)
+        self.web_page.send('thisisausername', self.ip, self.name)
         # -------------------------------------------------------------------
 
     @staticmethod
@@ -54,8 +53,9 @@ class handleSocket:
             self.client.send(text)
 
     def sendFile(self, file_path: str):
-        name = os.path.basename(file_path)
+
         with open(file_path, 'rb') as fp:
+            name = fp.name
             while content := fp.readline():
                 with self.client_lock:
                     self.client.send(handleSocket.__getHeader(content, f'FILE {name}'))

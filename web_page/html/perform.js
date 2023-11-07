@@ -1,23 +1,35 @@
+
+function generateName()
+{
+    var user_ = "random-"
+    var possible_ = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 6; i++ )
+    {
+        user_ += possible_.charAt(Math.floor(Math.random() * possible_.length));
+    }
+    return user_;
+}
+
 function initiate(code)
-{   
+{
     var connectToCode_;
     while(true)
     {
-        try 
+        try
         {
             connectToCode_ = new WebSocket('ws://localhost:12345');
             break;
         }
-        catch (error) 
+        catch (error)
         {
             console.error('::Connection error :', error);                                       //*debug
         }
     }
     console.log("connected to 12345");                                                              //*debug
-    if (code == 1) 
-        senderdetail = generateName(); 
-    else  
-        senderdetail = document.getElementById("user_name").value; 
+    if (code == 1)
+        senderdetail = generateName();
+    else
+        senderdetail = document.getElementById("user_name").value;
 
     if (senderdetail == "")  return false;
 
@@ -25,14 +37,7 @@ function initiate(code)
     form_group.style.display = "none";
     display_name.textContent = senderdetail;
     connectToCode_.addEventListener('message', (event) => {
-
-        if (event.data != "2ef7bde608ce5404e97d5f042f95f89f1c232871")
-        {
-            console.error('::Received unknown code handshake error :', event.data);
-            return false;
-        }
-        else
-            console.log('::Received message :', event.data);                                       //*debug
+                                                 //*debug
     });
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected to python");                                                        //*debug
@@ -42,7 +47,7 @@ function initiate(code)
 }
 
 
-function sendmessages()                         
+function sendmessages()
 {
     const connecttocode_ = new WebSocket('ws://localhost:12345');
     if (focusedUser == null)
@@ -51,14 +56,14 @@ function sendmessages()
         return false;
     }
     connecttocode_.addEventListener('open', (event) => {
-        connecttocode_.send(createmessage());   
+        connecttocode_.send(createmessage());
         console.log("message sent");                                                               //*debug
     });
     /*sending messages on port :12345 message syntax : "thisisamessage_/!_" + Content + "~^~" + focusedUser.id */
 }
 
 
-function recievedataFromPython()   
+function recievedataFromPython()
 {
     var connectToCode_;
     try {
@@ -69,7 +74,7 @@ function recievedataFromPython()
     }
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected");                                                               //*debug
-    });                                                                   
+    });
     connectToCode_.addEventListener('message', (event) => {
         var recievedata_ = event.data.split("_/!_");
         console.log('::Received message :'+recievedata_);                                       //*debug
@@ -83,8 +88,8 @@ function recievedataFromPython()
             console.error('::Received unknown message :', event.data);                           //*debug
     });
     connectToCode_.addEventListener('close', (event) => {
-        console.log('::Connection closed :', event.data);  
-    });                                     
+        console.log('::Connection closed :', event.data);
+    });
     /* data syntax : thisisamessage_/!_message~^~recieverid syntax of recieverid :
      name(^)ipaddress using port 12346 to recieve
        data syntax : thisisausername_/!_name(^)ipaddress
@@ -104,17 +109,6 @@ let Spwaned   =   [];
 let countMessage   =   {};
 let users_list     =   {};
 
-
-function generateName()
-{
-    var user_ = "random-"
-    var possible_ = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 6; i++ )
-    {
-        user_ += possible_.charAt(Math.floor(Math.random() * possible_.length));
-    }
-    return user_;
-}
 
 function eventlisteners()
 {
@@ -170,7 +164,9 @@ function createmessage()
     countMessage[focusedUser.id] += 1 ;
     focusedUser.appendChild(subDiv_);
     // document.getElementById("message").value="";
-    return "thisisamessage_/!_" + Content_ + "~^~" + focusedUser.id
+    var sendip_ = focusedUser.id
+    sendip_ = sendip_.split('_')[1]
+    return "thisisamessage_/!_" + Content_ + "~^~" + sendip_
 }
 
 function recievedmessage(recievedata)

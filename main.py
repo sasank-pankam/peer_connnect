@@ -11,9 +11,10 @@ server_socket = None
 
 
 def get_peer_list(ip) -> list[tuple[str, str]]:
+    print('Getting peers in the network')
 
     initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print(ip)
+
     initial_server_socket.connect((ip, 12345))
     msg = b'list'
     msg = msg + b' ' * (64 - len(msg))
@@ -25,6 +26,7 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
         print(k)
         str_ip = initial_server_socket.recv(int(k.decode()))
     lis_ip = eval(str_ip)
+
     server_socket = initial_server_socket
     return lis_ip
 
@@ -55,8 +57,10 @@ def initialize():
     global current_server, acceptor_thread, exit_event
     name, ip = get_credentials()
     ip = ip.strip()
+
+    peer_list = get_peer_list(ip)
     with re.locks['server_given_list']:
-        re.server_given_list.extend(get_peer_list(ip))
+        re.server_given_list.extend(peer_list)
         print(re.server_given_list)
     web_socket = wm.WebSocketHandler()
 

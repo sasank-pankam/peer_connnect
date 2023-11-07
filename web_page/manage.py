@@ -11,13 +11,17 @@ def send_message(ip, text):
         re.connected_sockets[ip.strip()].sendText(text)
 
 
+def send_file(ip, path):
+    with re.locks['connected_sockets']:
+        re.connected_sockets[ip.strip()].sendFile(path)
+
+
 def process_message(message):
-    message = message.split()
-    if message[0] == 'TEXT':
-        ip = message[1]
-        send_message(ip, message[-1])
-    if message[0] == 'CMD':
-        pass
+    message = message.split('_/!_')
+    if message[0] == 'thisisamessage':
+        send_message(*reversed(message[1].split('~^~')))
+    elif message[0] == 'thisisafile':
+        send_file(*reversed(message[1].split('~^~')))
 
 
 class WebSocketHandler:
@@ -37,5 +41,5 @@ class WebSocketHandler:
             th = threading.Thread(target=process_message, args=[message])
             th.start()
 
-    def send(self, ip, text):
-        self.websocket.send(f'TEXT {ip} {text}')
+    def send(self, header, ip, text):
+        self.websocket.send(f'{header}_/!_{text}(^){ip}')

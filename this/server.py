@@ -19,14 +19,24 @@ def get_local_ip_address():
         return str(e)
 
 
+def send_name(client: soc.socket, name: str):
+    send_name = name.encode()
+    send_name += b' ' * (64 - len(send_name))
+    client.send(send_name)
+
+
 def connectPeers(web_socket, name) -> dict[obj.handleSocket]:
     lis = {}  # list of peer sockets
+
+    print('Connecting to the peers')
     with re.locks['server_given_list']:
         if re.server_given_list:
             for addr in re.server_given_list:
                 peer = soc.socket(soc.AF_INET, soc.SOCK_STREAM)
                 try:
                     peer.connect(addr)
+                    send_name(peer, name)
+
                     lis[addr[0]] = obj.handleSocket(peer, addr, web_socket, name)
                     print(f'Connected to {addr}')
                 except Exception as e:
@@ -59,6 +69,9 @@ def acceptPeers(server: soc.socket, web_socket, name, exit_event: threading.Even
 
         if server in readable:
             new_client, new_client_address = server.accept()
+            print(f'Got a new peer with address {new_client_address}')
+            send_name(new_client, name)
+
             with re.locks['connected_sockets']:
                 re.connected_sockets[new_client_address] = (
                     peer := obj.handleSocket(new_client, new_client_address, web_socket, name))
