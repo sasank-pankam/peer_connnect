@@ -1,7 +1,7 @@
 function initiate()
-{   
+{
     var connectToCode_;
-     connectToCode_ = new WebSocket('ws://localhost:12345');                                        
+     connectToCode_ = new WebSocket('ws://localhost:12345');
     console.log("connected to 12345");                                                              //*debug
 
     main_division.style.display = "flex";
@@ -18,7 +18,7 @@ function initiate()
 }
 
 
-function sendmessages()                         
+function sendmessages()
 {
     connecttocode_ = new WebSocket('ws://localhost:12345');
     if (focusedUser == null)
@@ -27,7 +27,7 @@ function sendmessages()
         return false;
     }
     connecttocode_.addEventListener('open', (event) => {
-        connecttocode_.send(createmessage());   
+        connecttocode_.send(createmessage());
         console.log("message sent");                                                               //*debug
     });
     /*sending messages on port :12345 message syntax : "thisisamessage_/!_" + Content + "~^~" + focusedUser.id */
@@ -46,7 +46,7 @@ function searchfunction()
     );
 }
 
-function recievedataFromPython()   
+function recievedataFromPython()
 {
     var connectToCode_;
     try {
@@ -57,7 +57,7 @@ function recievedataFromPython()
     }
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected");                                                               //*debug
-    });                                                                   
+    });
     connectToCode_.addEventListener('message', (event) => {
         var recievedata_ = event.data.split("_/!_");
         if  (recievedata_[0] == "thisisamessage")
@@ -207,7 +207,7 @@ function recievedmessage(recievedata)
     subDiv_.textContent =recievedata;
     subDiv_.className="message";
     subDiv_.id = "message_"+countMessage;
-    wrapperdiv_.className="messagewrapper left";    
+    wrapperdiv_.className="messagewrapper left";
     wrapperdiv_.appendChild(subDiv_);
     // wrapperdiv_.className="messagewrapper";
     recieverid_.appendChild(wrapperdiv_);
