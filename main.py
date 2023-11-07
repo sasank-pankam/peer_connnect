@@ -13,7 +13,9 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
         initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         print('Getting peers in the network')
+
         initial_server_socket.connect((ip, 12345))
+        print('zsdkdjb')
         msg = b'list'
         msg = msg + b' ' * (64 - len(msg))
         initial_server_socket.send(msg)

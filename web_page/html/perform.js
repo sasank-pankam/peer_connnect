@@ -191,7 +191,7 @@ function createmessage()
     wrapperdiv_.appendChild(subDiv_);
     wrapperdiv_.className = "messagewrapper right";
     focusedUser.appendChild(wrapperdiv_);
-    // document.getElementById("message").value="";
+    document.getElementById("message").value="";
     focusedUser.scrollBy(0,100);
     return "thisisamessage_/!_" + Content_ + "~^~" + focusedUser.id
 }

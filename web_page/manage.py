@@ -34,7 +34,7 @@ async def handler(websocket, path):
         data = await websocket.recv()
         reply = f"Data received as: {data}!"
         print(data)
-        websocket.send(reply)
+        await websocket.send(reply)
 
 
 async def send_file(ip, _path):
