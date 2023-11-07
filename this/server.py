@@ -41,7 +41,7 @@ def connectPeers(name) -> dict[obj.handleSocket]:
                     lis[addr] = obj.handleSocket(peer, addr, name)
                     print(f'Connected to {addr}')
                 except Exception as e:
-                    print(f'Cannot able to connect to {addr} due to {e.__cause__} ')
+                    print(f'Cannot able to connect to {addr} due to {e} ')
                     continue
     return lis
 
@@ -79,7 +79,7 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
                     peer := obj.handleSocket(new_client, new_client_address[0], name))
 
             with re.locks['threads_of_connected_peers']:
-                if peer := td.Thread(target=peer.receiveSomething) not in re.threads_of_connected_peers:
+                if (peer := td.Thread(target=peer.receiveSomething)) not in re.threads_of_connected_peers:
                     re.threads_of_connected_peers.append(peer)
             peer.start()
 
