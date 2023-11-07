@@ -5,28 +5,22 @@ function initiate()
     main_division.style.display = "flex";
     form_group.style.display = "none";
     headertile.style.display = "flex";
-
     connectToCode_.addEventListener('open', (event) => {
-        console.log("connected to python");                                                        //*debug
-    });
-    eventlisteners();
-    recievedataFromPython(connectToCode_);
-}
-
-
-function sendmessages()
-{
-    connecttocode_ = new WebSocket('ws://localhost:12346');
-    if (focusedUser == null)
-    {
-        document.getElementById("intial_view").textContent="Select a user to chat";
-        return false;
-    }
-    connecttocode_.addEventListener('open', (event) => {
-        connecttocode_.send(createmessage());
-        console.log("message sent");                                                               //*debug
+        document.getElementById("senderbutton").addEventListener("click",function(){
+            if (focusedUser == null)
+            {
+                document.getElementById("intial_view").textContent="Select a user to chat";
+            }
+            else
+            {
+                connectToCode_.send(createmessage());
+                console.log("message sent");
+            }
+        });
     });
     /*sending messages on port :12345 message syntax : "thisisamessage_/!_" + Content + "~^~" + focusedUser.id */
+    eventlisteners();
+    recievedataFromPython(connectToCode_);
 }
 function searchfunction()
 {
@@ -45,9 +39,6 @@ function searchfunction()
 function recievedataFromPython(connecttocode_)
 {
     var connectToCode_ = connecttocode_;
-    connectToCode_.addEventListener('open', (event) => {
-        console.log("connected");                                                               //*debug
-    });
     connectToCode_.addEventListener('message', (event) => {
         var recievedata_ = event.data.split("_/!_");
         console.log('::Received message :', event.data);                                       //*debug
