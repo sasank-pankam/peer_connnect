@@ -2,7 +2,7 @@ function initiate()
 {
     var connectToCode_;
      connectToCode_ = new WebSocket('ws://localhost:12345');
-    console.log("connected to 12345");                                                              //*debug
+    console.log("connected to 12346");                                                              //*debug
 
     main_division.style.display = "flex";
     form_group.style.display = "none";
@@ -20,7 +20,7 @@ function initiate()
 
 function sendmessages()
 {
-    connecttocode_ = new WebSocket('ws://localhost:12345');
+    connecttocode_ = new WebSocket('ws://localhost:12346');
     if (focusedUser == null)
     {
         document.getElementById("intial_view").textContent="Select a user to chat";
