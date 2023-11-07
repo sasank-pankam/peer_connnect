@@ -7,9 +7,6 @@ socket.addEventListener('open', (event) => {
 socket.addEventListener('message', (event) => {
     const message = event.data;
     console.log('Message from server:', message);
-    for (let i = 0; i < 100; i++) {
-        socket.send('Hello, Server! '+i);
-    }
 });
 
 socket.addEventListener('close', (event) => {

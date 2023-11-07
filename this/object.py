@@ -46,7 +46,7 @@ class handleSocket:
             self.name = h.decode(constants.FORMAT).strip()
 
         # -------------------------------------------------------------------
-        asyncio.get_event_loop().run_until_complete(wm.send('thisisausername', self.ip, self.name))
+        wm.send('thisisausername', self.ip, self.name)
         # -------------------------------------------------------------------
 
     @staticmethod

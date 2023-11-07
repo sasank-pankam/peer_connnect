@@ -7,9 +7,9 @@ _websocket = None
 _name = None
 
 
-async def send(header, ip, text):
+def send(header, ip, text):
     global _websocket
-    await _websocket.send(f'{header}_/!_{text}(^){ip}')
+    asyncio.run(_websocket.send(f'{header}_/!_{text}(^){ip}'))
 
 
 async def process_message(_message):
@@ -33,7 +33,7 @@ async def handler(websocket, path):
         data = await websocket.recv()
         reply = f"Data received as: {data}!"
         print(data)
-        await websocket.send(reply)
+        websocket.send(reply)
 
 
 async def send_file(ip, _path):
