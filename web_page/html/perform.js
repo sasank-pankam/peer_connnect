@@ -196,9 +196,10 @@ function createmessage()
 
 function recievedmessage(recievedata)
 {
-    var reciever = recievedata.split("~^~")[1];
-    recievedata = recievedata.split("~^~")[0];
-    console.log("::recievedata : ","person_"+reciever);
+    console.log("::recievedata : ",recievedata.split("(^)"));
+    var reciever = recievedata.split("(^)")[1];
+    recievedata = recievedata.split("(^)")[0];
+    console.log("::recievedata : ","person_",reciever);
     var recieverid_ = document.getElementById("person_"+reciever);
     if(recieverid_ == null)
     {
@@ -212,7 +213,7 @@ function recievedmessage(recievedata)
     var wrapperdiv_ = document.createElement("div");
     var subDiv_ = document.createElement("div");
     var recieverview_ = document.getElementById("viewer_"+reciever);
-    recieverview_.scrollTo=recieverview__.scrollBy(0,100);
+    recieverview_.scrollTo=recieverview_.scrollBy(0,100);
     subDiv_.textContent =recievedata;
     subDiv_.className="message";
     subDiv_.id = "message_"+countMessage;
