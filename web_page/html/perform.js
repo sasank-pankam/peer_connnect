@@ -183,7 +183,7 @@ function createmessage()
         wrapperdiv_.appendChild(subDiv_);
         wrapperdiv_.className = "messagewrapper right";
         focusedUser.appendChild(wrapperdiv_);
-        return ("thisisafile_/!_"+Content_.split("::")[1]+"~^~" + focusedUser.id);
+        return ("thisisafile_/!_"+Content_.split("::")[1]+"~^~" + focusedUser.id.split("_")[1]);
     }
     subDiv_.textContent = Content_;
     subDiv_.className = "message";
@@ -195,7 +195,7 @@ function createmessage()
     focusedUser.appendChild(wrapperdiv_);
     focusedUser.scrollBy(0,100);
     document.getElementById("message").value="";
-    return "thisisamessage_/!_" + Content_ + "~^~" + focusedUser.id
+    return "thisisamessage_/!_" + Content_ + "~^~" + focusedUser.id.split("_")[1]);
 }
 
 function recievedmessage(recievedata)

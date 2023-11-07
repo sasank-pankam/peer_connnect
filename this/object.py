@@ -17,7 +17,7 @@ def process(obj, header: list, content) -> bool:
                 fp.write(content)
 
         elif header[0] == 'FILE-COMPLETED':
-            wm.send('compleatedafiletransfer', obj.ip, header[1])
+            wm.send('completedafiletransfer', obj.ip, header[1])
 
         elif header[0] == 'CLOSE-CONNECTION':
             wm.send('thisisacommand', obj.ip, constants.closing_message)
