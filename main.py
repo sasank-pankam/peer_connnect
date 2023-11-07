@@ -86,10 +86,10 @@ def signal_handler(signum, frame):
     try:
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.connect((server_ip, 12345))
-
         msg = b'exit'
         msg = msg + b' ' * (64 - len(msg))
         server.send(msg)
+        server.close()
     except Exception:
         pass
     print('Exiting from the server...')
@@ -99,7 +99,6 @@ def signal_handler(signum, frame):
         exit_event.set()
         acceptor_thread.join()
         current_server.close()
-
 
 
 if __name__ == '__main__':
