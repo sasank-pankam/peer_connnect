@@ -7,26 +7,31 @@ import constants
 import resources.resources as re
 
 
+def process(obj, header: list, content) -> bool:
+    try:
+        if header[0] == 'TEXT':
+            wm.send('thisisamessage', obj.ip, content.decode(constants.FORMAT))
+
+        elif header[0] == 'FILE':
+            with open(f'{re.directory}/{header[1]}', 'ab') as fp:
+                fp.write(content)
+
+        elif header[0] == 'FILE-COMPLETED':
+            wm.send('compleatedafiletransfer', obj.ip, header[1])
+
+        elif header[0] == 'CLOSE-CONNECTION':
+            wm.send('thisisacommand', obj.ip, constants.closing_message)
+            with re.locks['connected_sockets']:
+                re.connected_sockets.pop(obj.ip)
+            obj.bool_var = False
+
+    except Exception as e:
+        print('Unable to process a message due to', e)
+    return True
+
+
 class handleSocket:
     sender_name = None
-
-    def process(self, header: list, content) -> bool:
-
-        try:
-            if header[0] == 'TEXT':
-                wm.send('thisisamessage', self.ip, content.decode(constants.FORMAT))
-            elif header[0] == 'FILE':
-                with open(f'{re.directory}/{header[1]}', 'ab') as fp:
-                    fp.write(content)
-            elif header[0] == 'FILE-COMPLETED':
-                wm.send('compleatedafiletransfer', self.ip, header[1])
-            elif header[0] == 'CLOSE':
-                wm.send('thisisacommand', self.ip, constants.closing_message)
-                self.bool_var = False
-
-        except Exception as e:
-            print('Unable to process a message due to', e)
-        return True
 
     def __init__(self, handle: soc.socket, ip: str, name: str):
         self.sender_name = name
@@ -65,6 +70,8 @@ class handleSocket:
                     self.client.send(handleSocket.__getHeader(content, f'FILE {name}'))
                     self.client.send(content)
                     time.sleep(0.01)
+            with self.client_lock:
+                self.client.send(handleSocket.__getHeader(b'', f'FILE-COMPLETED {name}'))
 
     def sendFile(self, file_path: str):
         threading.Thread(target=self._sendFile, args=(file_path,)).start()
