@@ -202,7 +202,7 @@ function recievedmessage(recievedata)
 {
     var reciever = recievedata.split("~^~")[1];
     recievedata = recievedata.split("~^~")[0];
-    var recieverid_ = document.getElementById(reciever);
+    var recieverid_ = document.getElementById("person_"+reciever);
     if(recieverid_ == null)
     {
         console.error("::recieverid_ is null ",reciever);
@@ -210,18 +210,18 @@ function recievedmessage(recievedata)
     }
     if(recieverid_ != focusedUser)
     {
-        var tile = document.getElementById("person_"+reciever.split("_")[1]);
-        tile.style.backgroundColor = "#92b892";
+        recieverid_.style.backgroundColor = "#92b892";
     }
     var wrapperdiv_ = document.createElement("div");
     var subDiv_ = document.createElement("div");
-    recieverid_.scrollTo=recieverid_.scrollBy(0,100);
+    var recieverview_ = document.getElementById("viewer_"+reciever);
+    recieverview_.scrollTo=recieverview__.scrollBy(0,100);
     subDiv_.textContent =recievedata;
     subDiv_.className="message";
     subDiv_.id = "message_"+countMessage;
     wrapperdiv_.className="messagewrapper left";
     wrapperdiv_.appendChild(subDiv_);
     // wrapperdiv_.className="messagewrapper";
-    recieverid_.appendChild(wrapperdiv_);
+    recieverview_.appendChild(wrapperdiv_);
     countMessage++;
 }
