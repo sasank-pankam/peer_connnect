@@ -9,9 +9,9 @@ _name = None
 
 
 def send(header, ip, text):
-    print(f'send  ---- {header}_/!_{text}(^){ip}')
     global _websocket
     asyncio.run(_websocket.send(f'{header}_/!_{text}(^){ip}'))
+    print(f'send  ---- {header}_/!_{text}(^){ip}')
 
 
 async def process_message(_message):

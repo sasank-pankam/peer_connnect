@@ -12,13 +12,13 @@ function initiate()
         {
              senderdetail = data_[1];
              display_name.textContent = senderdetail;
-         }
+        }
     });
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected to python");                                                        //*debug
     });
     eventlisteners();
-    recievedataFromPython();
+    recievedataFromPython(connectToCode_);
 }
 
 
@@ -50,15 +50,9 @@ function searchfunction()
     );
 }
 
-function recievedataFromPython()
+function recievedataFromPython(connecttocode_)
 {
-    var connectToCode_;
-    try {
-        connectToCode_ = new WebSocket('ws://localhost:12346');
-    }
-    catch (error) {
-        console.error('::Connection error :', error);                                       //*debug
-    }
+    var connectToCode_ = connecttocode_;
     connectToCode_.addEventListener('open', (event) => {
         console.log("connected");                                                               //*debug
     });
@@ -202,6 +196,7 @@ function recievedmessage(recievedata)
 {
     var reciever = recievedata.split("~^~")[1];
     recievedata = recievedata.split("~^~")[0];
+    console.log("::recievedata : ","person_"+reciever);
     var recieverid_ = document.getElementById("person_"+reciever);
     if(recieverid_ == null)
     {
