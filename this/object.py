@@ -1,3 +1,4 @@
+import os.path
 import socket as soc
 from web_page import manage as wm
 import threading
@@ -12,13 +13,12 @@ def process(obj, header: list, content) -> bool:
     try:
         if header[0] == 'TEXT':
             wm.send('thisisamessage', obj.ip, content.decode(constants.FORMAT))
-
         elif header[0] == 'FILE':
             with open(f'{re.directory}/{header[1]}', 'ab') as fp:
                 fp.write(content)
 
         elif header[0] == 'FILE-COMPLETED':
-            wm.send('completedafiletransfer', obj.ip, header[1])
+            wm.send('thisisafile', obj.ip, header[1])
 
         elif header[0] == 'CLOSE-CONNECTION':
             wm.send('thisisacommand', obj.ip, constants.closing_message)
@@ -69,8 +69,9 @@ class handleSocket:
             self.client.send(text.encode(constants.FORMAT))
 
     def _sendFile(self, file_path: str):
+        print('sendFile', file_path)
         with open(file_path, 'rb') as fp:
-            name = fp.name
+            name = os.path.basename(file_path)
             while content := fp.readline():
                 with self.client_lock:
                     self.client.send(handleSocket.__getHeader(content, f'FILE {name}'))
@@ -102,4 +103,5 @@ class handleSocket:
             self.client.send(constants.closing_message.encode(constants.FORMAT))
             self.client.close()
         except Exception as e:
+            print('ERROR IN RECIVING FILE from' , self.ip)
             wm.send('thisisacommand', self.ip, constants.closing_message)

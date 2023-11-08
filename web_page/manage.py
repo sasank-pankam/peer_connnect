@@ -44,6 +44,7 @@ async def handler(websocket, path):
 def send_file(ip, _path):
     print('send_file --- ',ip, _path)
     with re.locks['connected_sockets']:
+        print(re.connected_sockets)
         re.connected_sockets[ip.strip()].sendFile(_path)
 
 
