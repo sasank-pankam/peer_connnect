@@ -6,8 +6,10 @@ function initiate()
     form_group.style.display = "none";
     headertile.style.display = "flex";
     connectToCode_.addEventListener('open', (event) => {
-        document.getElementById("senderbutton").addEventListener("click",function(){
-        console.log("intiete");
+
+        document.getElementById("senderbutton").addEventListener("click",
+        function()
+        {
             if (focusedUser == null)
             {
                 document.getElementById("intial_view").textContent="Select a user to chat";
@@ -18,6 +20,7 @@ function initiate()
                 console.log("message sent");
             }
         });
+
     });
     /*sending messages on port :12346 message syntax : "thisisamessage_/!_" + Content + "~^~" + focusedUser.id */
     eventlisteners();
@@ -49,9 +52,7 @@ function recievedataFromPython(connecttocode_)
         var recievedata_ = event.data.split("_/!_");
         console.log('::Received message :', event.data);                                       //*debug
         if  (recievedata_[0] == "thisisamessage")
-
             recievedmessage(recievedata_[1]);
-
         else if (recievedata_[0] == "thisisausername")
             {
                 createtile(recievedata_[1]);
@@ -204,7 +205,7 @@ function recievedmessage(recievedata)
     }
     if(recieverid_ != focusedUser)
     {
-        recieverid_.style.backgroundColor = "#92b892";
+        recieverid_.style.backgroundColor = "var(--dark)";
     }
     var wrapperdiv_ = document.createElement("div");
     var subDiv_ = document.createElement("div");
