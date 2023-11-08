@@ -7,6 +7,7 @@ function initiate()
     headertile.style.display = "flex";
     connectToCode_.addEventListener('open', (event) => {
         document.getElementById("senderbutton").addEventListener("click",function(){
+        console.log("intiete");
             if (focusedUser == null)
             {
                 document.getElementById("intial_view").textContent="Select a user to chat";
@@ -18,7 +19,7 @@ function initiate()
             }
         });
     });
-    /*sending messages on port :12345 message syntax : "thisisamessage_/!_" + Content + "~^~" + focusedUser.id */
+    /*sending messages on port :12346 message syntax : "thisisamessage_/!_" + Content + "~^~" + focusedUser.id */
     eventlisteners();
     recievedataFromPython(connectToCode_);
 }
@@ -43,6 +44,7 @@ function recievedataFromPython(connecttocode_)
         var recievedata_ = event.data.split("_/!_");
         console.log('::Received message :', event.data);                                       //*debug
         if  (recievedata_[0] == "thisisamessage")
+
             recievedmessage(recievedata_[1]);
 
         else if (recievedata_[0] == "thisisausername")
@@ -53,10 +55,10 @@ function recievedataFromPython(connecttocode_)
         {
             recievedmessage(recievedata_[1])
         }
-        else if (recievedata[0] == 'thisisacommand')
+        else if (recievedata_[0] == 'thisisacommand')
         {
-            removeuser(recievedata[1]);
-            console.log("::User leaving away :"recievedata[1]);
+            removeuser(recievedata_[1]);
+            console.log("::User leaving away :",recievedata_[1]);
         }
         else if (recievedata_[0] == "thisismyusername")
         {
@@ -208,26 +210,24 @@ function recievedmessage(recievedata)
     subDiv_.id = "message_"+countMessage;
     wrapperdiv_.className="messagewrapper left";
     wrapperdiv_.appendChild(subDiv_);
-    // wrapperdiv_.className="messagewrapper";
     recieverview_.appendChild(wrapperdiv_);
     countMessage++;
 }
 function removeuser(idin)
 {
     idin = idin.split("(^)");
-    var user_ = document.getElementByid("person_"+idin[1]);
-    var userview_ = document.getElementByid("viewer_"+idin[1]);
-    if (focusedUser != user_)
+    var user_ = document.getElementById("person_"+idin[1]);
+    var userview_ = document.getElementById("viewer_"+idin[1]);
+    console.log("uafaeu :",focusedUser);
+    division_alive.removeChild(user_);
+    if (focusedUser != userview_)
     {
-        division_alive.removeChild(user_);
         division_viewerpov.removeChild(userview_);
     }
     else
     {
-        while(division_viewerpov.firstChild)
-            division_viewerpov.removeChild(division_viewerpov.firstChild);
-         userview_.textContent('User Lost !');
+         division_viewerpov.appendChild(initial_view);
+         userview_.textContent='User Lost !';
          focusedUser = null;
-
     }
 }

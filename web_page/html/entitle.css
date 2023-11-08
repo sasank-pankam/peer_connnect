@@ -154,10 +154,12 @@ body{
     font-size: 1.2em;
     font-family: inherit;
     resize: none;
+    padding-top: 0.8em
 }
 #message::placeholder{
     position: relative;
     left :1%;
+    top : 1%;
     color: rgb(147, 145, 176);
     font-size: .9em;
     font-family: 'Times New Roman', Times, serif;
