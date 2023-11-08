@@ -36,7 +36,12 @@ function searchfunction()
     }
     );
 }
-
+function revert()
+{
+    users_list.forEach(element => {
+            element.style.display = "flex";
+    });
+}
 function recievedataFromPython(connecttocode_)
 {
     var connectToCode_ = connecttocode_;
@@ -220,6 +225,7 @@ function removeuser(idin)
     var userview_ = document.getElementById("viewer_"+idin[1]);
     console.log("uafaeu :",focusedUser);
     division_alive.removeChild(user_);
+    users_list.splice(users_list.indexOf(user_),1);
     if (focusedUser != userview_)
     {
         division_viewerpov.removeChild(userview_);
