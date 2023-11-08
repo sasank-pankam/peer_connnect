@@ -7,7 +7,7 @@
 	--superlight : #89DID9;
 }
 body{
-	background-color: var(--superdark);
+	background-color: var(--superlight);
 }
 .main
 {

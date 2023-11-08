@@ -27,6 +27,7 @@ def send_name(client: soc.socket, name: str):
 
 
 def connectPeers(name) -> dict[obj.handleSocket]:
+    """connects to peers and return a dictionary of ip -> handleSocket"""
     lis = {}  # list of peer sockets
 
     print('Connecting to the peers')
@@ -47,6 +48,8 @@ def connectPeers(name) -> dict[obj.handleSocket]:
 
 
 def managePeers(name):
+    """A function that connects to ip given by server and starts a thread of reciveSomething function of handleSocket object and satrst that threads"""
+
     time.sleep(4)
     peers = connectPeers(name)
 
@@ -63,6 +66,7 @@ def managePeers(name):
 
 
 def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
+    """receives a server socket and listens for new connections and starts a thread that runs reciveSomething function"""
     server.listen()
     print(f'Listening for connections at {server.getsockname()} ')
 
@@ -88,6 +92,7 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
 
 
 def makeServer(name, exit_event) -> tuple[soc.socket, td.Thread]:
+    """Functon makes a server and calls accept peers to receive new users"""
     time.sleep(4)
     server_ip = get_local_ip_address()
     server_port = 7070
