@@ -41,6 +41,11 @@ def validate_arguments(arguments: list[str]):
         t = arguments[ind].split('=')
         if t[0] == '--name':
             lis[0] = t[1]
+        elif t[0] == '--dir':
+            lis[2] = t[1]
+        elif t[0] == '--ip':
+            lis[1] = t[1]
+
     with open('credentials.txt', 'w') as fp:
         fp.writelines(lis)
 

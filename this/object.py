@@ -4,6 +4,7 @@ import threading
 import time
 import constants
 import resources.resources as re
+import select
 
 
 def process(obj, header: list, content) -> bool:
@@ -82,16 +83,23 @@ class handleSocket:
         threading.Thread(target=self._sendFile, args=(file_path,)).start()
 
     def receiveSomething(self):
-        while self.bool_var:
-            header = self.client.recv(64)
-            if not header:
-                continue
-            header = header.decode(constants.FORMAT).split()
+        try:
+            while self.bool_var:
+                readable, _, _ = select.select([self.client], [], [], 0.001)
 
-            actContent = self.client.recv(int(header[-1]))
+                if self.client in readable:
+                    header = self.client.recv(64)
+                    if not header:
+                        continue
+                    header = header.decode(constants.FORMAT).split()
 
-            # processing and exiting the loop
-            process(self, header, actContent)
-            time.sleep(0.01)
-        self.client.send(constants.closing_message.encode(constants.FORMAT))
-        self.client.close()
+                    actContent = self.client.recv(int(header[-1]))
+
+                    # processing and exiting the loop
+                    process(self, header, actContent)
+                    time.sleep(0.01)
+
+            self.client.send(constants.closing_message.encode(constants.FORMAT))
+            self.client.close()
+        except Exception as e:
+            wm.send('thisisacommand', self.ip, constants.closing_message)
