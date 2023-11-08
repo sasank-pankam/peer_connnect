@@ -70,7 +70,7 @@ class handleSocket:
 
     def _sendFile(self, file_path: str):
         print('sendFile', file_path)
-        with open(file_path, 'rb') as fp:
+        with open(file_path.strip(), 'rb') as fp:
             name = os.path.basename(file_path)
             while content := fp.readline():
                 with self.client_lock:

@@ -1,18 +1,13 @@
 :root
 {
 	--superdark : #052026;
-	--dark : black;
-	--medium : rgb(145, 145, 143);
-	--light : rgb(49, 47, 47);
-	--superlight : #89D1D9;
-}
-*
-{
-    font-family :sans-serif;
+	--dark : #025159;
+	--medium : #2A828C;
+	--light : #419CA6;
+	--superlight : #89DID9;
 }
 body{
-	background-color: whitesmoke;
-	color: #e2dedb;
+	background-color: var(--superdark);
 }
 .main
 {
@@ -23,12 +18,11 @@ body{
     display: none;
     flex-direction: row;
     align-items: stretch;
-	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084) , 0px 2px 3px rgba(0, 0, 0, 0.168);
+	box-shadow: 0px 0px 10px 0px #8fa48f;
 }
 .header
 {
 	display: flex;
-	background-color: var(--dark);
 	align-items: stretch;
 	height: 7vh;
 	padding: .3% 0%;
@@ -36,7 +30,7 @@ body{
 	margin-left: .7%;
 	margin-bottom: 1%;
 	margin-right: 1%;
-	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.084) , 0px 5px 5px rgba(0, 0, 0, 0.168);
+	box-shadow: 0px 0px 10px 0px #8fa48f;
 }
 #display_name
 {
@@ -61,15 +55,15 @@ body{
     padding: 1.5% 1% 1% 1%;
     flex-grow: 1;
     overflow-y: scroll;
-	border-right:1.2px solid #d7e5e7;
+	border-right:1.2px solid #042629;
 }
 .usertile
 {
 	color: white;
     height: 8%;
-    background-color:var(--medium);
+    background-color:#026773;
     margin-bottom:7%;
-	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084) , 0px 2px 3px rgba(0, 0, 0, 0.168);
+	box-shadow: 0px 0px 15px 0px #90b290;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,7 +71,7 @@ body{
 }
 .alive > div:hover
 {
-    background-color: var(--superdark);
+    background-color: rgba(66, 67, 66, 0.208);
     transition: cubic-bezier(0.755, 0.05, 0.855, 0.06);
     transform: scale(1.01);
     animation: 0.5s ease-in-out 0s 1 alternate none running pulse;
@@ -128,18 +122,18 @@ body{
 }
 .message
 {
-	background-color: var(--dark);
+	background-color: #e6e8df;
 	width: 17em;
 	height: fit-content;
 	box-sizing: border-box;
-	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084) , 0px 2px 3px rgba(0, 0, 0, 0.168);
+	box-shadow: 0px 0px 10px 0px #8fa48f;
 	padding: 4% 4%;
 	border-radius: .3em;
   	overflow-wrap: break-word;
 }
 .message:hover
 {
-  background-color: var(--light);
+  background-color: #d2d5c9;
   transition: cubic-bezier(0.755, 0.05, 0.855, 0.06);
   transform: scale(1.01);
   animation: 0.5s ease-in-out 0s 1 alternate none running pulse;
@@ -148,7 +142,7 @@ body{
 
 .sender_area
 {
-	box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084) , 0px 2px 3px rgba(0, 0, 0, 0.168);
+	box-shadow: 0px 0px 6px 0px #8fa48f;
     flex:13%;
     padding-right: 1%;
     padding-left: 1%;

@@ -8,13 +8,13 @@ import signal
 
 
 def get_peer_list(ip) -> list[tuple[str, str]]:
+    """returns a list of ip that are in network"""
     try:
         initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         print('Getting peers in the network')
 
         initial_server_socket.connect((ip, 12345))
-        print('zsdkdjb')
         msg = b'list'
         msg = msg + b' ' * (64 - len(msg))
         initial_server_socket.send(msg)
@@ -35,6 +35,7 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
 
 
 def validate_arguments(arguments: list[str]):
+    """validates the arguments given by user (updating credentials.txt)"""
     with open('credentials.txt', 'r') as fp:
         lis = fp.readlines()
     for ind in range(1, len(arguments)):
@@ -51,6 +52,7 @@ def validate_arguments(arguments: list[str]):
 
 
 def get_credentials():
+    """reads name,ip,directory from credentials.txt"""
     with open('credentials.txt', 'r') as fp:
         name, ip = fp.readline(), fp.readline()
         return name, ip
@@ -62,12 +64,15 @@ exit_event = threading.Event()
 server_ip = None
 
 
-def sodi(name, exit_event):
+def wrapper_of_makeServer(name, exit_event):
+    """A wrapper function for makeserver function to update local variables current_server, acceptor_thread"""
     global current_server, acceptor_thread
     current_server, acceptor_thread = this_server.makeServer(name, exit_event)
 
 
 def initialize():
+    """initialises the main programme"""
+
     global current_server, acceptor_thread, exit_event, server_ip
     name, ip = get_credentials()
     ip = ip.strip()
@@ -78,15 +83,17 @@ def initialize():
     with re.locks['server_given_list']:
         re.server_given_list.extend(peer_list)
         print(re.server_given_list)
-    td1 = threading.Thread(target=this_server.managePeers, args=[name])
-    td2 = threading.Thread(target=sodi, args=[name, exit_event])
-    td1.start()
-    td2.start()
+
+    this_server.managePeers(name)
+    wrapper_of_makeServer(name, exit_event)
 
     wm.make_server(name)
 
 
 def signal_handler(signum, frame):
+    """
+    handles the keyboard interrupt ctrl+c
+    """
     global current_server, exit_event, acceptor_thread
     print('Exiting the programme')
     try:
