@@ -84,9 +84,10 @@ def initialize():
         re.server_given_list.extend(peer_list)
         print(re.server_given_list)
 
-    this_server.managePeers(name)
-    wrapper_of_makeServer(name, exit_event)
-
+    t1 = threading.Thread(target=this_server.managePeers, args=[name])
+    t2 = threading.Thread(target=wrapper_of_makeServer, args=[name, exit_event])
+    t1.start()
+    t2.start()
     wm.make_server(name)
 
 
