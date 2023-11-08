@@ -8,7 +8,6 @@ import signal
 
 
 def get_peer_list(ip) -> list[tuple[str, str]]:
-
     try:
         initial_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -36,14 +35,14 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
 
 
 def validate_arguments(arguments: list[str]):
+    with open('credentials.txt', 'r') as fp:
+        lis = fp.readlines()
     for ind in range(1, len(arguments)):
         t = arguments[ind].split('=')
         if t[0] == '--name':
-            with open('credentials.txt', 'r') as fp:
-                lis = fp.readlines()
-                lis[0] = t[1]
-            with open('credentials.txt', 'w') as fp:
-                fp.writelines(lis)
+            lis[0] = t[1]
+    with open('credentials.txt', 'w') as fp:
+        fp.writelines(lis)
 
 
 def get_credentials():
