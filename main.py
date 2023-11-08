@@ -40,6 +40,7 @@ def validate_arguments(arguments: list[str]):
         lis = fp.readlines()
     for ind in range(1, len(arguments)):
         t = arguments[ind].split('=')
+        t[1] += '\n'
         if t[0] == '--name':
             lis[0] = t[1]
         elif t[0] == '--dir':
