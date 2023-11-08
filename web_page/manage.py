@@ -33,16 +33,19 @@ async def handler(websocket, path):
 
     global _websocket
     _websocket = websocket
-    await websocket.send(f'thisismyusername_/!_{_name}')
-    while True:
-        data = await websocket.recv()
-        reply = f"Data received as: {data}!"
-        print(data)
-        await process_message(data)
+    try:
+        await websocket.send(f'thisismyusername_/!_{_name}')
+        while True:
+            data = await websocket.recv()
+            reply = f"Data received as: {data}!"
+            print(data)
+            await process_message(data)
+    except Exception as e:
+        print('webpage closed!!')
 
 
 def send_file(ip, _path):
-    print('send_file --- ',ip, _path)
+    print('send_file --- ', ip, _path)
     with re.locks['connected_sockets']:
         print(re.connected_sockets)
         re.connected_sockets[ip.strip()].sendFile(_path)

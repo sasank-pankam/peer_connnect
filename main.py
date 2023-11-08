@@ -14,7 +14,6 @@ def get_peer_list(ip) -> list[tuple[str, str]]:
         print('Getting peers in the network')
 
         initial_server_socket.connect((ip, 12345))
-        print('zsdkdjb')
         msg = b'list'
         msg = msg + b' ' * (64 - len(msg))
         initial_server_socket.send(msg)
@@ -78,6 +77,7 @@ def initialize():
     with re.locks['server_given_list']:
         re.server_given_list.extend(peer_list)
         print(re.server_given_list)
+
     td1 = threading.Thread(target=this_server.managePeers, args=[name])
     td2 = threading.Thread(target=sodi, args=[name, exit_event])
     td1.start()
