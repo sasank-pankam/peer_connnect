@@ -25,6 +25,7 @@ def get_locks():
         dic[i] = td.Lock()
     with open('./credentials.txt', 'r') as fp:
         _, _, directory = fp.readline(), fp.readline(), fp.readline()
+        directory = directory.strip()
     return dic
 
 

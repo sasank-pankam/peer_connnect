@@ -53,7 +53,7 @@ class handleSocket:
         # except:
         #     pass
         # -------------------------------------------------------------------
-        print('wejl')
+        print('debug')
 
     @staticmethod
     def __getHeader(text: str | bytes, *extras):
@@ -86,7 +86,7 @@ class handleSocket:
     def receiveSomething(self):
         try:
             while self.bool_var:
-                print(f'{self.ip}\'s bool_var : ---->> {self.bool_var}')
+                # print(f'{self.ip}\'s bool_var : ---->> {self.bool_var}')
                 readable, _, _ = select.select([self.client], [], [], 0.001)
 
                 if self.client in readable:

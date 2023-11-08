@@ -75,14 +75,14 @@ function recievedataFromPython(connecttocode_)
         else
             console.error('::Received unknown message :', event.data);                           //*debug
     });
-    window.addEventListener('beforeunload', function (event) {
-        event.preventDefault();
-        event.returnValue = '';
-        connectToCode_.close();
-      });
-    connectToCode_.addEventListener('close', (event) => {
-        console.log('::Connection closed :', event.data);
-    });
+    // window.addEventListener('beforeunload', function (event) {
+    //     event.preventDefault();
+    //     event.returnValue = '';
+    //     connectToCode_.close();
+    //   });
+    // connectToCode_.addEventListener('close', (event) => {
+    //     console.log('::Connection closed :', event.data);
+    // });
     /* data syntax : thisisamessage_/!_message~^~recieverid syntax of recieverid :
      name(^)ipaddress using port 12346 to recieve
        data syntax : thisisausername_/!_name(^)ipaddress
