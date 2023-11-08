@@ -103,5 +103,5 @@ class handleSocket:
             self.client.send(constants.closing_message.encode(constants.FORMAT))
             self.client.close()
         except Exception as e:
-            print('ERROR IN RECIVING FILE from' , self.ip)
+            print('ERROR IN RECIVING FILE from', self.ip)
             wm.send('thisisacommand', self.ip, constants.closing_message)
