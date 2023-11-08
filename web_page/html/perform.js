@@ -53,6 +53,11 @@ function recievedataFromPython(connecttocode_)
         {
             recievedmessage(recievedata_[1])
         }
+        else if (recievedata[0] == 'thisisacommand')
+        {
+            removeuser(recievedata[1]);
+            console.log("::User leaving away :"recievedata[1]);
+        }
         else if (recievedata_[0] == "thisismyusername")
         {
             console.log("::Your user name :",recievedata_[1]);
@@ -137,6 +142,7 @@ function showcurrent(user)
         Spwaned[i].style.display = "none";
     }
     user.style.display = "flex";
+    user.style.backgroundColor = ""
     focusedUser = user;
     viewname.textContent = nametile_.textContent;
 }
@@ -205,4 +211,23 @@ function recievedmessage(recievedata)
     // wrapperdiv_.className="messagewrapper";
     recieverview_.appendChild(wrapperdiv_);
     countMessage++;
+}
+function removeuser(idin)
+{
+    idin = idin.split("(^)");
+    var user_ = document.getElementByid("person_"+idin[1]);
+    var userview_ = document.getElementByid("viewer_"+idin[1]);
+    if (focusedUser != user_)
+    {
+        division_alive.removeChild(user_);
+        division_viewerpov.removeChild(userview_);
+    }
+    else
+    {
+        while(division_viewerpov.firstChild)
+            division_viewerpov.removeChild(division_viewerpov.firstChild);
+         userview_.textContent('User Lost !');
+         focusedUser = null;
+
+    }
 }
