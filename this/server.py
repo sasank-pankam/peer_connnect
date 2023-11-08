@@ -50,7 +50,7 @@ def connectPeers(name) -> dict[obj.handleSocket]:
 def managePeers(name):
     """A function that connects to ip given by server and starts a thread of reciveSomething function of handleSocket object and satrst that threads"""
 
-    time.sleep(4)
+    time.sleep(3)
     peers = connectPeers(name)
 
     threads = [td.Thread(target=peers[x].receiveSomething) for x in peers]
@@ -71,6 +71,7 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
     print(f'Listening for connections at {server.getsockname()} ')
 
     while not exit_event.is_set():
+        print('Exit event : ------> ',exit_event.set())
         readable, _, _ = select.select([server], [], [], 0.001)
 
         if server in readable:
@@ -93,7 +94,8 @@ def acceptPeers(server: soc.socket, name, exit_event: threading.Event):
 
 def makeServer(name, exit_event) -> tuple[soc.socket, td.Thread]:
     """Functon makes a server and calls accept peers to receive new users"""
-    time.sleep(4)
+
+    time.sleep(3)
     server_ip = get_local_ip_address()
     server_port = 7070
 
