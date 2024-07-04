@@ -87,7 +87,10 @@ class handleSocket:
         try:
             while self.bool_var:
                 # print(f'{self.ip}\'s bool_var : ---->> {self.bool_var}')
-                readable, _, _ = select.select([self.client], [], [], 0.001)
+                self.check_flag = fd
+                import selectors
+                readable, _, _ = select.select([self.client, self.check_flag], [], [])
+
 
                 if self.client in readable:
                     header = self.client.recv(64)
